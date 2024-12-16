@@ -12,6 +12,8 @@
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "@types/styled-components": "^5.1.26",
+    "ajv": "^6.12.6",
+    "ajv-keywords": "^3.5.2",
     "cpy-cli": "^4.2.0",
     "immutable": "^4.3.2",
     "interfaces": "^0.0.3",

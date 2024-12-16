@@ -1,0 +1,127 @@
+.full-tray {
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    bottom: 0px;
+    z-index: 0;
+    mix-blend-mode: normal;
+    /* backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.4); */
+    height: 504px;
+    /* transform-origin: 50% 50% 0px; */
+}
+
+.tray-mc-container {
+    position: relative;
+    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+
+.tray-mc-header {
+    position: absolute;
+    top: 41px;
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    right: 60px;
+}
+
+.tray-trigger-close-button {
+    right: 60px;
+    padding: 0px;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    border: 1px solid rgb(229, 229, 229);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    position: absolute;
+    z-index: 3;
+}
+  
+.menu-button {
+    background-color: #ccc;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+.tray-mc-content {
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 504px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .tray-mc-grid {
+    font-family: 'Roboto';
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    background: 0 0;
+  }
+
+  .tray-mc-list-wrapper {
+    top: 0px;
+    width: 100vw;
+    height: 100%;
+    font-size: 16px;
+    text-align: left;
+    overflow-y: scroll;
+    position: absolute;
+    padding: 50px 30px 0px;
+    background-color: transparent;
+    padding: 50px 60px 50px 168px;
+  }
+
+  .mc-list-title {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 19px;
+  }
+  
+  .mc-list-count {
+    color: rgb(189, 189, 189);
+    margin-left: 13px;
+  }
+
+  .heading {
+    background-color: #fff;
+    padding: 8px;
+    text-align: center;
+    align-items: center;
+    margin: 2px;
+    height: 58px;
+    border: none;
+    width: 31%;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+  }
+
+  .tray-mc-list-item-selection::before {
+    width: 10px;
+    height: 10px;
+    content: "";
+    display: block;
+    margin: 0px 16px 0px 0px;
+    border-radius: 100%;
+    border: 1px solid rgb(14 2 2);
+  }

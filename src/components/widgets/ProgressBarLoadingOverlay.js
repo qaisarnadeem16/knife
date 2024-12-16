@@ -19,7 +19,7 @@ const ProgressBarLoadingContainer = styled.div`
   /* height: 80vh; */
   padding: 10px;
   display: inline-flex;
-  padding: 48px 0;
+  padding: 48px 24px;
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;

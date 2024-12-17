@@ -1,7 +1,8 @@
+import React from 'react';
+import { useEffect, useState, FC, } from 'react';
 import { Option, Step, ThemeTemplateGroup, useZakeke } from 'zakeke-configurator-react';
 import { T, useActualGroups, useUndoRedoActions, useUndoRegister } from '../../../Helpers';
 import { Map } from 'immutable';
-import React, { useEffect, useState } from 'react';
 import useStore from '../../../Store';
 import styled from 'styled-components/macro';
 import savedCompositionsIcon from '../../../assets/icons/arrow-left-solid.svg';
@@ -53,6 +54,10 @@ const SelectorMobile = () => {
 	const [isDesignsDraftListOpened, setisDesignsDraftListOpened] = useState(false);
 	const [isTemplateGroupOpened, setIsTemplateGroupOpened] = useState(false);
 	const [isStartRegistering, setIsStartRegistering] = useState(false);
+	const [activeGroupIndex, setActiveGroupIndex] = useState(0); // ✅ Call at the top level
+	const [activeIndex, setActiveIndex] = useState(0); // ✅ Call at the top level
+	const [showLeftArrow, setShowLeftArrow] = useState(false); // ✅ Call at the top level
+	const [showRightArrow, setShowRightArrow] = useState(false); // ✅ Call at the top level
 	const undoRegistering = useUndoRegister();
 	const undoRedoActions = useUndoRedoActions();
 
@@ -66,8 +71,8 @@ const SelectorMobile = () => {
 	const currentTemplateGroups = selectedStep
 		? selectedStep.templateGroups
 		: selectedGroup
-		? selectedGroup.templateGroups
-		: [];
+			? selectedGroup.templateGroups
+			: [];
 
 	const currentItems = [...currentAttributes, ...currentTemplateGroups].sort(
 		(a, b) => a.displayOrder - b.displayOrder
@@ -87,43 +92,43 @@ const SelectorMobile = () => {
 
 	const [lastSelectedSteps, setLastSelectedSteps] = useState(Map<number, number>());
 
-	const handleNextGroup = () => {
-		if (selectedGroup) {
-			if (groupIndex < actualGroups.length - 1) {
-				const nextGroup = actualGroups[groupIndex + 1];
-				handleGroupSelection(nextGroup.id);
-			}
-		}
-	};
+	// const handleNextGroup = () => {
+	// 	if (selectedGroup) {
+	// 		if (groupIndex < actualGroups.length - 1) {
+	// 			const nextGroup = actualGroups[groupIndex + 1];
+	// 			handleGroupSelection(nextGroup.id);
+	// 		}
+	// 	}
+	// };
 
-	const handlePreviousGroup = () => {
-		if (selectedGroup) {
-			if (groupIndex > 0) {
-				let previousGroup = actualGroups[groupIndex - 1];
-				handleGroupSelection(previousGroup.id);
+	// const handlePreviousGroup = () => {
+	// 	if (selectedGroup) {
+	// 		if (groupIndex > 0) {
+	// 			let previousGroup = actualGroups[groupIndex - 1];
+	// 			handleGroupSelection(previousGroup.id);
 
-				// Select the last step
-				if (previousGroup.steps.length > 0)
-					handleStepSelection(previousGroup.steps[previousGroup.steps.length - 1].id);
-			}
-		}
-	};
+	// 			// Select the last step
+	// 			if (previousGroup.steps.length > 0)
+	// 				handleStepSelection(previousGroup.steps[previousGroup.steps.length - 1].id);
+	// 		}
+	// 	}
+	// };
 
 	const handleStepChange = (step: Step | null) => {
 		if (step) handleStepSelection(step.id);
 	};
 
-	const handleGroupSelection = (groupId: number | null) => {
-		setIsStartRegistering(undoRegistering.startRegistering());
+	// const handleGroupSelection = (groupId: number | null) => {
+	// 	setIsStartRegistering(undoRegistering.startRegistering());
 
-		if (groupId && selectedGroupId !== groupId && !isUndo && !isRedo) {
-			undoRedoActions.eraseRedoStack();
-			undoRedoActions.fillUndoStack({ type: 'group', id: selectedGroupId, direction: 'undo' });
-			undoRedoActions.fillUndoStack({ type: 'group', id: groupId, direction: 'redo' });
-		}
+	// 	if (groupId && selectedGroupId !== groupId && !isUndo && !isRedo) {
+	// 		undoRedoActions.eraseRedoStack();
+	// 		undoRedoActions.fillUndoStack({ type: 'group', id: selectedGroupId, direction: 'undo' });
+	// 		undoRedoActions.fillUndoStack({ type: 'group', id: groupId, direction: 'redo' });
+	// 	}
 
-		setSelectedGroupId(groupId);
-	};
+	// 	setSelectedGroupId(groupId);
+	// };
 
 	const handleStepSelection = (stepId: number | null) => {
 		setIsStartRegistering(undoRegistering.startRegistering());
@@ -175,7 +180,7 @@ const SelectorMobile = () => {
 
 		try {
 			if ((window as any).algho) (window as any).algho.sendUserStopForm(true);
-		} catch (e) {}
+		} catch (e) { }
 	};
 
 	// Initial template selection
@@ -187,8 +192,8 @@ const SelectorMobile = () => {
 
 	// auto-selection if there is only 1 group
 	useEffect(() => {
-		
-		if (actualGroups && actualGroups.length === 1 && actualGroups[0].id === -2 ) return;
+
+		if (actualGroups && actualGroups.length === 1 && actualGroups[0].id === -2) return;
 		else if (actualGroups && actualGroups.length === 1 && !selectedGroupId) setSelectedGroupId(actualGroups[0].id);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -198,7 +203,7 @@ const SelectorMobile = () => {
 	useEffect(() => {
 		if (selectedGroup && selectedGroup.id !== -2) {
 			if (selectedGroup.steps.length > 0) {
-				
+
 				if (lastSelectedSteps.get(selectedGroupId!))
 					handleStepSelection(lastSelectedSteps.get(selectedGroupId!)!);
 				else {
@@ -271,21 +276,133 @@ const SelectorMobile = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isStartRegistering]);
 
+
+	useEffect(() => {
+		if (!actualGroups || actualGroups.length === 0) return;
+
+		// Handle single group special case
+		if (actualGroups.length === 1) {
+			if (actualGroups[0].id !== -2 && !selectedGroupId) {
+				setSelectedGroupId(actualGroups[0].id);
+			}
+			return;
+		}
+
+		// Default to the first group if none is selected
+		if (!selectedGroupId && actualGroups[0]?.id) {
+			setSelectedGroupId(actualGroups[0].id);
+		}
+	}, [actualGroups, selectedGroupId]);
+
+	const handleGroupSelection = (groupId: number | null) => {
+		setIsStartRegistering(undoRegistering.startRegistering());
+
+		if (groupId && selectedGroupId !== groupId) {
+			undoRedoActions.eraseRedoStack();
+			undoRedoActions.fillUndoStack({ type: 'group', id: selectedGroupId, direction: 'undo' });
+			undoRedoActions.fillUndoStack({ type: 'group', id: groupId, direction: 'redo' });
+		}
+
+		setSelectedGroupId(groupId);
+	};
+
+	const handleNextGroup = () => {
+		if (activeGroupIndex < actualGroups.length - 1) {
+			setActiveGroupIndex(activeGroupIndex + 1);
+			handleGroupSelection(actualGroups[activeGroupIndex + 1].id); // Call handleGroupSelection
+		}
+	};
+
+	const handlePreviousGroup = () => {
+		if (activeGroupIndex > 0) {
+			setActiveGroupIndex(activeGroupIndex - 1);
+			handleGroupSelection(actualGroups[activeGroupIndex - 1].id); // Call handleGroupSelection
+		}
+	};
+
+	const handleScroll = () => {
+		const scrollableElement = document.querySelector('.scroll-snap-x');
+		if (scrollableElement) {
+			const { scrollLeft, scrollWidth, clientWidth } = scrollableElement;
+			const tolerance = 2; // Small tolerance to handle rounding issues
+
+			setShowLeftArrow(scrollLeft > tolerance);
+			setShowRightArrow(scrollLeft < scrollWidth - clientWidth - tolerance);
+		}
+	};
+
+	const handlePrevious = (item: any) => {
+		if (activeIndex > 0) {
+			const newIndex = activeIndex - 1;
+			setActiveIndex(newIndex);
+			handleOptionSelection(item.options[newIndex]);
+		}
+	};
+
+	const handleNext = (item: any) => {
+		if (activeIndex < item.options?.length - 1) {
+			const newIndex = activeIndex + 1;
+			setActiveIndex(newIndex);
+			handleOptionSelection(item.options[newIndex]);
+		}
+	};
+
 	if (isSceneLoading)
-    return (
-      <PreviewContainer>
-        <BlurOverlay>
-          {/* <span>Loading scene...</span>; */}
-          <ProgressBarLoadingOverlay />
-        </BlurOverlay>
-      </PreviewContainer>
-    );
+		return (
+			<PreviewContainer>
+				<BlurOverlay>
+					{/* <span>Loading scene...</span>; */}
+					<ProgressBarLoadingOverlay />
+				</BlurOverlay>
+			</PreviewContainer>
+		);
+
+
 
 	return (
 		<SelectorMobileContainer>
-			{/* {sellerSettings && sellerSettings.priceInfoText && (
+			{sellerSettings && sellerSettings.priceInfoText && (
 				<PriceInfoTextContainer dangerouslySetInnerHTML={{ __html: sellerSettings.priceInfoText }} />
-			)} */}
+			)}
+
+
+			<div className="flex justify-center bg-gray-50 w-full items-center">
+				{actualGroups.length > 0 && (
+					<div className="flex justify-center w-full items-center">
+						{/* Previous Button */}
+						<button
+							onClick={handlePreviousGroup}
+							disabled={activeGroupIndex === 0} // Disable if it's the first group
+							className="z-10  "
+						>
+							{activeGroupIndex !== 0 && <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1L1 6.7037L7 12" stroke="black" stroke-linecap="round"></path><path d="M13 1.00049L7 6.70419L13 12.0005" stroke="black" stroke-width="2" stroke-linecap="round"></path></svg>}
+
+						</button>
+
+						{/* Active Group */}
+						<div
+							key={actualGroups[activeGroupIndex].guid}
+							className=" py-1 px-5 flex justify-center items-center"
+						>
+							<button onClick={() => handleGroupSelection(actualGroups[activeGroupIndex].id)} className="text-xl font-bold text-black leading-relaxed tracking-wide">
+								{actualGroups[activeGroupIndex].name
+									? T._d(actualGroups[activeGroupIndex].name)
+									: T._('Customize', 'Composer')}
+							</button>
+						</div>
+
+						{/* Next Button */}
+						<button
+							onClick={handleNextGroup}
+							disabled={activeGroupIndex === actualGroups.length - 1} // Disable if it's the last group
+							className=" z-10"
+						>
+							{activeGroupIndex !== actualGroups.length - 1 &&
+								<svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1L13 6.7037L7 12" stroke="black" stroke-linecap="round"></path><path d="M1 1.00049L7 6.70419L1 12.0005" stroke="black" stroke-width="2" stroke-linecap="round"></path></svg>}
+						</button>
+					</div>
+				)}
+			</div>
 
 			{selectedGroup && selectedGroup.id !== -2 && selectedGroup.steps && selectedGroup.steps.length > 0 && (
 				<StepsMobileContainer>
@@ -301,29 +418,31 @@ const SelectorMobile = () => {
 					/>
 				</StepsMobileContainer>
 			)}
-			{selectedGroup == null && (
-				<MobileItemsContainer
-					isLeftArrowVisible
-					isRightArrowVisible
-					scrollLeft={scrollLeft ?? 0}
-					onScrollChange={(value) => setScrollLeft(value)}
-				>
-					{actualGroups.map((group) => {
-						if (group)
-							return (
-								<MenuItem
-									key={group.guid}
-									imageUrl={
-										group.id === -3 ? savedCompositionsIcon : group.imageUrl ? group.imageUrl : star
-									}
-									label={group.name ? T._d(group.name) : T._('Customize', 'Composer')}
-									onClick={() => handleGroupSelection(group.id)}
-								></MenuItem>
-							);
-						else return null;
-					})}
-				</MobileItemsContainer>
-			)}
+
+			{/* <MobileItemsContainer2
+				isLeftArrowVisible
+				isRightArrowVisible
+				scrollLeft={scrollLeft ?? 0}
+				onScrollChange={(value) => setScrollLeft(value)}
+			>
+				{actualGroups.map((group) => {
+					if (group)
+						return (
+							<MenuItem2
+								key={group.guid}
+								imageUrl={
+									group.id === -3 ? savedCompositionsIcon : group.imageUrl ? group.imageUrl : star
+								}
+								label={group.name ? T._d(group.name) : T._('Customize', 'Composer')}
+								onClick={() => handleGroupSelection(group.id)}
+							></MenuItem2>
+						);
+					else return null;
+				})}
+			</MobileItemsContainer2> */}
+
+
+
 
 			{/* <AttributesContainer > */}
 			{selectedGroup && selectedGroup.id === -2 && templates.length > 1 && (
@@ -332,8 +451,8 @@ const SelectorMobile = () => {
 						<Template
 							key={template.id}
 							selected={currentTemplate === template}
-							onClick={() => {
-								setTemplate(template.id);
+							onClick={async () => {
+								await setTemplate(template.id);
 							}}
 						>
 							{T._d(template.name)}
@@ -341,7 +460,8 @@ const SelectorMobile = () => {
 					))}
 				</TemplatesContainer>
 			)}
-			{selectedGroup && (
+
+			{selectedGroup && selectedGroup.name  && (
 				<MobileItemsContainer
 					isLeftArrowVisible
 					isRightArrowVisible
@@ -429,6 +549,195 @@ const SelectorMobile = () => {
 						)}
 					</MobileItemsContainer>
 				</MobileItemsContainer>
+			)}
+
+
+
+
+			{selectedGroup && (selectedGroup.name === "PANEL" || selectedGroup.name === "BOTTOM") && (
+				<>
+					{/* Attributes */}
+					<>
+						{selectedGroup &&
+							!selectedAttribute &&
+							!selectedTemplateGroupId &&
+							currentItems &&
+							currentItems.map((item) => {
+								if (!(item instanceof ThemeTemplateGroup)) {
+									return (
+
+										<div key={item.guid} >
+											{item.name === "Color Variant" ?
+												<MobileItemsContainer
+													isLeftArrowVisible
+													isRightArrowVisible
+													scrollLeft={attributesScroll ?? 0}
+													onScrollChange={(value) => setAttributesScroll(value)}
+												>
+													<div style={{ display: 'flex', gap: '.5rem', }} className=' w-full'>
+														{item.options.map((option) => {
+															const optionKey = `option-${option.guid}`;
+															const isSelected = option.selected; // Check if the option is selected
+															return (
+																<div key={option.guid}>
+																	<MenuItem
+																		key={optionKey}
+																		isRound={item.optionShapeType === 2}
+																		description={option.description}
+																		selected={isSelected}
+																		imageUrl={option.imageUrl ?? noImage}
+																		label={T._d(option.name)}
+																		onClick={() => handleOptionSelection(option)}
+																		hideLabel={item.hideOptionsLabel}
+																	/>
+																</div>
+															);
+														})}
+													</div>
+												</MobileItemsContainer>
+												:
+												<div className="max-w-full  bg-white flex justify-center items-center relative">
+													{/* Previous Button */}
+													{showLeftArrow && (
+														<button
+															onClick={() => handlePrevious(item)}
+															disabled={activeIndex === 0 || item.options.length <= 1}
+															className={`z-10 mb-4 h-6 w-6 bg-slate-100 flex items-center justify-center rounded-full absolute left-2 ${activeIndex === 0 || item.options.length <= 1 ? 'opacity-50 cursor-not-allowed' : ''
+																}`}
+														>
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																viewBox="0 0 1024 1024"
+																width="45px"
+																height="45px"
+																fill="#000000"
+																transform="rotate(180)"
+															>
+																<path d="M419.3 264.8l-61.8 61.8L542.9 512 357.5 697.4l61.8 61.8L666.5 512z" />
+															</svg>
+														</button>
+													)}
+
+													{/* Options List */}
+													<div onScroll={handleScroll} className="flex gap-4 mx-auto py-1 overflow-x-auto scroll-snap-x no-scrollbar">
+														{item.options.map((option, i) => (
+															<div
+																key={i}
+																className={`flex flex-col  justify-center cursor-pointer `}
+																onClick={() => {
+																	setActiveIndex(i); // Set the active index
+																	handleOptionSelection(option); // Handle the option selection
+																}}
+																style={{
+																	textAlign: 'center',
+																}}
+															>
+																<img
+																	src={option.imageUrl ?? noImage}
+																	alt={option.name}
+																	className={`rounded-full shadow-md ${option.selected ? 'border-[4px] border-black max-w-[55px] max-h-[55px]  min-w-[55px] min-h-[55px] ' : 'max-w-[50px] max-h-[50px] min-w-[50px] min-h-[50px] '
+																		}`}
+																/>
+																<div className="text-xs font-medium pt-1">{option.name.slice(0, 6)}</div>
+															</div>
+														))}
+													</div>
+
+													{/* Next Button */}
+													{showRightArrow && (
+														<button
+															onClick={() => handleNext(item)}
+															disabled={activeIndex === item.options.length - 1 || item.options.length <= 1} // Disabled if last item or no items
+															className={`z-10 mb-4 h-6 w-6 bg-slate-100 flex items-center justify-center rounded-full absolute right-2 ${activeIndex === item.options.length - 1 || item.options.length <= 1
+																? 'opacity-50 cursor-not-allowed'
+																: ''
+																}`}
+														>
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																viewBox="0 0 1024 1024"
+																width="40px"
+																height="40px"
+																fill="#000000"
+															>
+																<path d="M419.3 264.8l-61.8 61.8L542.9 512 357.5 697.4l61.8 61.8L666.5 512z" />
+															</svg>
+														</button>
+													)}
+												</div>
+											}
+										</div>
+
+									);
+								} else {
+									return (
+										<div key={item.templateGroupID}>
+											<MenuItem
+												selected={item.templateGroupID === selectedTemplateGroupId}
+												onClick={() => handleTemplateGroupSelection(item.templateGroupID)}
+												imageUrl={noImage}
+												label={T._d(item.name)}
+												isRound={false}
+											>
+												<ItemName>{T._d(item.name).toUpperCase()}</ItemName>
+											</MenuItem>
+										</div>
+									);
+								}
+							})}
+
+					</>
+					{/* <MenuItem2
+																	key={optionKey}
+																	isRound={item.optionShapeType === 2}
+																	description={option.description}
+																	selected={isSelected}
+																	imageUrl={option.imageUrl ?? noImage}
+																	label={T._d(option.name)}
+																	onClick={() => handleOptionSelection(option)}
+																	hideLabel={item.optionShapeType === 2 ? item.hideOptionsLabel : true} /> */}
+
+					{/* Color Variant */}
+					{/* <MobileItemsContainer
+						isLeftArrowVisible={true}
+						isRightArrowVisible={true}
+						scrollLeft={optionsScroll ?? 0}
+						onScrollChange={(value) => setOptionsScroll(value)}
+					>
+						{lastSelectedItem?.type === 'attribute' ? (
+							selectedAttribute && selectedAttribute.options.length > 0 && (
+								selectedAttribute.options.map((option, index) =>
+									option.enabled && (
+										<MenuItem
+											isRound={selectedAttribute.optionShapeType === 2}
+											description={option.description}
+											selected={option.selected}
+											imageUrl={option.imageUrl ?? ''}
+											label={T._d(option.name)}
+											hideLabel={selectedAttribute.hideOptionsLabel}
+											key={option.guid}
+											onClick={() => handleOptionSelection(option)}
+										/>
+									)
+								)
+							)
+						) : (
+							selectedTemplateGroup &&
+							isTemplateGroupOpened && (
+								<TemplateGroup
+									key={selectedTemplateGroupId}
+									templateGroup={selectedTemplateGroup!}
+									isMobile
+									onCloseClick={() => {
+										setIsTemplateGroupOpened(false);
+										handleTemplateGroupSelection(null);
+										handleGroupSelection(null);
+									}}
+								/>
+							)
+						)}
+					</MobileItemsContainer> */}
+				</>
 			)}
 
 			{/* Designer / Customizer */}

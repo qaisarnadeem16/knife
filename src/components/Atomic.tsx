@@ -219,13 +219,20 @@ export const ZoomOutIcon = styled(Icon)`
 `;
 
 export const AddToCartButton = styled(Button)`
-	position: relative;
-	right: 10%;
-	min-width: 280px;
-	background-color: #297ca3;
-	font-family: 'Roboto';
-	font-size: 18px;
+  position: relative;
+  right: 10%;
+  min-width: 280px;
+  background-color: #297ca3;
+  font-family: 'Roboto';
+  font-size: 18px;
+
+  @media (max-width: 768px) {
+    display:none;
+    min-width: 100%; // Make it responsive for smaller screens
+    right: 0; // Adjust positioning for mobile
+  }
 `;
+
 
 export const TooltipContent = styled.div`
 	padding: 10px;

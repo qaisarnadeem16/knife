@@ -188,8 +188,8 @@ const Footer = () => {
 	};
 
 	const handleSubmitRequestQuote = async (formData: any) => {
-		console.log(formData,'formData');
-		
+		console.log(formData, 'formData');
+
 		// let thereIsARequiredFormEmpty = formData?.some((form: any) => form.required && form.value === '');
 		// if (thereIsARequiredFormEmpty)
 		// 	showDialog(
@@ -203,34 +203,34 @@ const Footer = () => {
 		// 		/>
 		// 	);
 		// else
-			try {
-				closeDialog('request-quotation');
-				setIsQuoteLoading(true);
-				setCameraByName('buy_screenshot_camera', false, false);
-				await saveComposition();
-				await createQuote(formData);
-				showDialog(
-					'message',
-					<MessageDialog
-						windowDecorator={CustomQuotationConfirmMessage}
-						message={T._('Request for quotation sent successfully', 'Composer')}
-					/>
-				);
-				setIsQuoteLoading(false);
-			} catch (ex) {
-				console.error(ex);
-				setIsQuoteLoading(false);
-				showDialog(
-					'error',
-					<ErrorDialog
-						error={T._(
-							'An error occurred while sending request for quotation. Please try again.',
-							'Composer'
-						)}
-						onCloseClick={() => closeDialog('error')}
-					/>
-				);
-			}
+		try {
+			closeDialog('request-quotation');
+			setIsQuoteLoading(true);
+			setCameraByName('buy_screenshot_camera', false, false);
+			await saveComposition();
+			await createQuote(formData);
+			showDialog(
+				'message',
+				<MessageDialog
+					windowDecorator={CustomQuotationConfirmMessage}
+					message={T._('Request for quotation sent successfully', 'Composer')}
+				/>
+			);
+			setIsQuoteLoading(false);
+		} catch (ex) {
+			console.error(ex);
+			setIsQuoteLoading(false);
+			showDialog(
+				'error',
+				<ErrorDialog
+					error={T._(
+						'An error occurred while sending request for quotation. Please try again.',
+						'Composer'
+					)}
+					onCloseClick={() => closeDialog('error')}
+				/>
+			);
+		}
 	};
 
 	const handleGetQuoteClick = async () => {

@@ -16,8 +16,8 @@ const LoadingLabel = styled.div`
 
 const LoaderContainer = styled.div`
   height: 10px;
-  // width: 600px;
-  width: 76vw;
+  width: 600px;
+  /* width: 76vw; */
   // height: 80vh;
   border-radius: 4px;
   background-color: #dbe2e6;
@@ -117,7 +117,7 @@ const ProgressBar = ({ bgColor, completed }) => {
         {/* {console.log(T.d('Loading..'),'esfdfsfdssfds');} */}
         {dynamicVals?.get("Loading...")}
 
-        {/* {isSceneLoading ? T._('Loading your product...', 'Composer') : T._('Loading complete.', 'Composer')} */}
+        {isSceneLoading ? T._('Loading your product...', 'Composer') : T._('Loading complete.', 'Composer')}
       </LoadingLabel>
       <LoaderContainer>
         <LoaderFill

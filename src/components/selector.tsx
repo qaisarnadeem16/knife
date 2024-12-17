@@ -518,7 +518,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
               </div>
               {/* )} */}
 
-              {currentIndex + 1 !== groups.length - 2 && (
+              {currentIndex + 1 !== groups.length && (
                 <button className="next-customization" onClick={handleRightClick}>
                   <div className="mc-prev">
                     Next

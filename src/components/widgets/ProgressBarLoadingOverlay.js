@@ -15,13 +15,15 @@ const ProgressBarLoadingBackground = styled.div`
   z-index: 12;
 `;
 const ProgressBarLoadingContainer = styled.div`
-  width: 80vw;
+  width: 40%;
+  margin: 0 auto;
   /* height: 80vh; */
   padding: 10px;
   display: inline-flex;
-  padding: 48px 24px;
+  padding: 80px 40px;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   gap: 8px;
   border-radius: 4px;
   background: var(--surface-default, #fff);

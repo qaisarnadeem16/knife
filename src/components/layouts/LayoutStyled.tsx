@@ -14,7 +14,7 @@ width: 100px;
 margin-bottom: 20px;
 text-align: center;
 cursor: pointer;
-padding: 0px 10px 0px 10px;
+ padding: 0px 10px 0px 10px;
 
 &:hover {
     background-color: white;

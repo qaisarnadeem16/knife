@@ -52,7 +52,7 @@ function LayoutMobile() {
     <MobileContainer>
       <Viewer />
       <SelectorMobile />
-      <FooterMobile />
+      {/* <FooterMobile /> */}
     </MobileContainer>
   );
 }

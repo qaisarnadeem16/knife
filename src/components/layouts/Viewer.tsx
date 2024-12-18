@@ -254,6 +254,7 @@ const Viewer = () => {
 	};
 
 
+
 	const [isFullscreen, setIsFullscreen] = useState(false);
 	const [containerHeight, setContainerHeight] = useState<number | null>(null);
 
@@ -290,8 +291,22 @@ const Viewer = () => {
 	}, [isFullscreen]);
 
 	return (
-		<ViewerContainer ref={ref} className={isFullscreen ? 'fullscreen viewer-container' : 'viewer-container'}>
+		<ViewerContainer ref={ref} className={isFullscreen ? 'fullscreen  viewer-container' : 'viewer-container'}>
 			{!isSceneLoading && <ZakekeViewer />}
+
+			{!IS_IOS && !isSceneLoading && (
+				<FullscreenArrowIcon
+					$isMobile={isMobile}
+					className='fullscreen-icon bg-red-800'
+					key={'fullscreen'}
+					hoverable
+					title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+					onClick={switchFullscreenArrows}
+				>
+
+					{isFullscreen ? <ArrowUpSimple /> : <ArrowDownSimple />}
+				</FullscreenArrowIcon>
+			)}
 			<>
 				{<div className='md:left-[3rem] left-[1rem] md:top-[.52rem] top-[1rem]' style={{ position: "absolute", fontWeight: "555" }}>
 					<div className='md:block hidden'>{product?.name}</div>
@@ -387,21 +402,9 @@ const Viewer = () => {
 								</FooterMobileIcon>
 							)} */}
 						</MobileFooterContainer>
-
-						{!IS_IOS && !isSceneLoading && (
-							<FullscreenArrowIcon
-								$isMobile={isMobile}
-								className='fullscreen-icon'
-								key={'fullscreen'}
-								hoverable
-								onClick={switchFullscreenArrows}
-							>
-
-								{isFullscreen ? <ArrowUpSimple /> : <ArrowDownSimple />}
-							</FullscreenArrowIcon>
-						)}
 					</>
 				)}
+
 				{sellerSettings?.isCompositionRecapEnabled && (
 					<RecapPanelIcon key={'recap'} onClick={() => setRecapPanelOpened(!isRecapPanelOpened)}>
 						<BarsSolid />

@@ -19,7 +19,7 @@ import TrayPreviewOpenButton from "./TrayPreviewOpenButton";
 import MenuTriggerButton from "./MenuTriggerButton";
 import ProgressBarLoadingOverlay from "./widgets/ProgressBarLoadingOverlay";
 import Designer from "./layouts/Designer";
-import { GroupItem, GroupIcon } from "./layouts/LayoutStyled";
+import { GroupItem, GroupIcon, MenuItemImagesImage } from "./layouts/LayoutStyled";
 import { createPortal } from "react-dom";
 import useStore from "../Store";
 import { T } from "../Helpers";
@@ -30,6 +30,8 @@ import Pagination from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from 'swiper/modules';
 import { Tooltip } from 'react-tooltip'
+import noImage from "../assets/images/no_image.png";
+
 
 // Import Swiper styles
 import "swiper/css";
@@ -39,6 +41,7 @@ import 'swiper/swiper-bundle.css';
 import { ReactComponent as AngleLeftSolid } from "../assets/icons/angle-left-solid.svg";
 import { ReactComponent as AngleRightSolid } from "../assets/icons/angle-right-solid.svg";
 import Loader from "./Loader";
+import { group } from "console";
 
 const dialogsPortal = document.getElementById("dialogs-portal")!;
 // const Container = styled.div`
@@ -360,7 +363,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
   };
   window.addEventListener("error", observerErrorHandler);
 
-  console.log('selectedFilteredAreas', selectedFilteredAreas)
+  console.log('selectedGroup', selectedGroup)
   // console.log('selectOptionName', selectedOptionName)
   return (
     <>
@@ -484,22 +487,22 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                         gap: '10px'
                       }}
                     >
+                      {/* <MenuItemImagesImage
+                        // isRound={groups[currentIndex]?.isRound}
+                        src={groups[currentIndex]?.imageUrl ? groups[currentIndex]?.imageUrl : noImage}
+                        alt={groups[currentIndex]?.name}
+                        loading='lazy'
+                      /> */}
+                      <img
+                        src={groups[currentIndex]?.imageUrl ?? undefined}
+                        alt=""
+                        className="w-10 h-16 object-contain rounded-full"
+                      />
+
                       {/* Group name dynamically displayed */}
                       {groups[currentIndex]?.name}
 
-                      {/* Uncomment and customize tooltip for group details if needed */}
-                      {/* <div
-            style={{ cursor: "pointer" }}
-            data-tooltip-id={`tooltip-${groups[currentIndex]?.id}`}
-            data-tooltip-variant="light"
-            data-tooltip-content={getTooltipDetail(groups[currentIndex]?.name)}
-          >
-            <svg width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M9 9C9 5.49997 14.5 5.5 14.5 9C14.5 11.5 12 10.9999 12 13.9999" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M12 18.01L12.01 17.9989" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </div> */}
+
                     </span>
                   </div>
 
@@ -647,23 +650,24 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                     textDecoration: "underline",
                   }}
                 >
-                  {selectedAttribute?.code === "Shelter Colors" && (
+                  {/* {selectedAttribute?.code === "Shelter Colors" && (
                     <h5 style={{ paddingBottom: "16px" }}>
                       <span>Select Color From Palette</span>
                     </h5>
-                  )}
+                  )} */}
                   {selectedGroup &&
                     selectedGroup.attributes &&
                     selectedGroup.attributes.length > 0 && (
                       <List
-                        isShelterColor={
-                          selectedAttribute?.code === "Shelter Colors"
-                        }
+                      // isShelterColor={
+                      //   selectedAttribute?.code === "Shelter Colors"
+                      // }
                       >
                         {selectedGroup.attributes.map((opts, i) => {
                           //  if (opts.code !== 'Seats' && opts.code != 'Shelter' && 
                           //  opts.code !=  'Logo' && opts.code !=  'Wheels'
                           //  ) 
+                          // console.log('pot-----', opts)
                           if (!validCodes.includes(opts.code)) {
                             if (opts.options.length <= 9) {
                               if (opts.enabled) {
@@ -684,6 +688,8 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                                           {atrOpts.imageUrl && (
                                             <ListItemImage
                                               src={atrOpts.imageUrl}
+                                              selected={atrOpts.selected}
+
                                             />
                                           )}
 
@@ -760,25 +766,58 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                     {selectedGroup &&
                       selectedGroup.attributes &&
                       selectedGroup.attributes.map((opts, i) => {
-                        if (opts.enabled === false) return <></>;
-                        if (i > 0 && opts.enabled && opts.options.length >= 17) {
+                        // if (opts.enabled === false) return <></>;
+                        if (opts.options.length >= 17) {
                           return (
-                            <Swiper
-                              // spaceBetween={0}
-                              slidesPerView={20} //20
-                              slidesPerGroup={1}
-                              pagination={{ clickable: true }}
-                              navigation={{
-                                nextEl: '.swiper-button-next',
-                                prevEl: '.swiper-button-prev',
-                              }}
-                              modules={[Navigation]}
-                              onReachEnd={() => setIsNextDisabled(true)}
-                            >
-                              <div className="swiper-button-prev"></div>
+                            // <Swiper
+                            //   spaceBetween="10px"
+                            //   slidesPerView={10} //20
+                            //   slidesPerGroup={1}
+                            //   pagination={{ clickable: true }}
+                            //   navigation={{
+                            //     nextEl: '.swiper-button-next',
+                            //     prevEl: '.swiper-button-prev',
+                            //   }}
+                            //   modules={[Navigation]}
+                            //   onReachEnd={() => setIsNextDisabled(true)}
+                            // >
+                            //   <div className="swiper-button-prev"></div>
+                            //   {opts.enabled &&
+                            //     opts.options.map((atrOpts) => (
+                            //       <SwiperSlide key={atrOpts.id}>
+                            //         <ListItemColor
+                            //           onClick={() => {
+                            //             selectOption(atrOpts.id);
+                            //             selectOptionId(atrOpts.id);
+                            //             selectOptionName(atrOpts.name);
+                            //           }}
+                            //           selected={atrOpts.selected}
+                            //           selectedColor={selectedColorName}
+                            //         >
+                            //           {atrOpts.imageUrl && (
+                            //             <ListItemImage src={atrOpts.imageUrl} />
+                            //           )}
+
+                            //           <div
+                            //             style={{
+                            //               position: "absolute",
+                            //               top: "70%",
+                            //             }}
+                            //           >
+                            //             {atrOpts.id === selectedOptionId
+                            //               ? atrOpts.name
+                            //               : ""}
+                            //           </div>
+                            //         </ListItemColor>
+                            //       </SwiperSlide>
+                            //     ))}
+
+                            //   <div className={`swiper-button-next ${isNextDisabled ? 'swiper-button-disabled' : ''}`}></div>
+                            // </Swiper>
+                            <div className="max-w-[1100px] items-center justify-center min-w-[500px] flex flex-wrap gap-3">
                               {opts.enabled &&
                                 opts.options.map((atrOpts) => (
-                                  <SwiperSlide key={atrOpts.id}>
+                                  <div key={atrOpts.id}>
                                     <ListItemColor
                                       onClick={() => {
                                         selectOption(atrOpts.id);
@@ -789,27 +828,27 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                                       selectedColor={selectedColorName}
                                     >
                                       {atrOpts.imageUrl && (
-                                        <ListItemImage src={atrOpts.imageUrl} />
+                                        <ListItemImage src={atrOpts.imageUrl}
+                                          selected={atrOpts.selected}
+                                        />
                                       )}
-
-                                      <div
+                                      {/* <p className="text-xs">
+                                        {atrOpts.name}
+                                      </p> */}
+                                      {/* <div
                                         style={{
                                           position: "absolute",
                                           top: "70%",
                                         }}
                                       >
-                                        {/* {atrOpts.name} */}
                                         {atrOpts.id === selectedOptionId
                                           ? atrOpts.name
                                           : ""}
-                                      </div>
+                                      </div> */}
                                     </ListItemColor>
-                                  </SwiperSlide>
+                                  </div>
                                 ))}
-
-                              <div className={`swiper-button-next ${isNextDisabled ? 'swiper-button-disabled' : ''}`}></div>
-                            </Swiper>
-
+                            </div>
                           );
                         }
                       })}
@@ -817,7 +856,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
 
 
                   <div>
-                    <List>
+                    {/* <List>
                       {selectedGroup &&
                         selectedGroup.attributes &&
                         // selectedGroup.attributes?.name =! 'Shelter Colors' &&
@@ -856,7 +895,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                             return null;
                           }
                         })}
-                    </List>
+                    </List> */}
                   </div>
 
                 </div>

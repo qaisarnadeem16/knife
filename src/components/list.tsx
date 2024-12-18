@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const List = styled.ul<{isShelterColor?: boolean}>`
+export const List = styled.ul<{ isShelterColor?: boolean }>`
     position: relative;
     margin: 0;
     padding: 10px;
@@ -22,7 +22,7 @@ export const List = styled.ul<{isShelterColor?: boolean}>`
         // left: 50vw;
         }
 `;
-  
+
 export const ListItem = styled.li<{ selected?: boolean }>`
     display: flex;
     flex-direction: column;    
@@ -41,7 +41,7 @@ export const ListItem = styled.li<{ selected?: boolean }>`
     border: 1px solid #297CA3;
     border-radius: 4px;
     background-color: ${props => props.selected ? '#297ca3' : 'white'};
-    color: ${props => props.selected ? 'white' : '#297ca3' };
+    color: ${props => props.selected ? 'white' : '#297ca3'};
 
     &:hover {
         background-color: #ffd966;
@@ -74,7 +74,7 @@ export const ListItemBig = styled.li<{ selected?: boolean }>`
     border: 1px solid #297CA3;
     border-radius: 4px;
     background-color: ${props => props.selected ? '#297ca3' : 'white'};
-    color: ${props => props.selected ? 'white' : '#297ca3' };
+    color: ${props => props.selected ? 'white' : '#297ca3'};
 
     &:hover {
         background-color: #ffd966;
@@ -89,7 +89,7 @@ export const ListItemBig = styled.li<{ selected?: boolean }>`
 `;
 
 
-export const ListItemColorWithCarousel = styled.li<{ selected?: boolean, selectedColor?: any}>`
+export const ListItemColorWithCarousel = styled.li<{ selected?: boolean, selectedColor?: any }>`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -113,8 +113,9 @@ export const ListItemColorWithCarousel = styled.li<{ selected?: boolean, selecte
     };
 
     &:after {
-    content: "${props => { return props.selected ? props.selectedColor : ''
-                        }}";
+    content: "${props => {
+        return props.selected ? props.selectedColor : ''
+    }}";
     position: absolute;
     top: 110%;
     border-bottom: 1px solid #000;
@@ -131,7 +132,7 @@ export const ListItemColorWithCarousel = styled.li<{ selected?: boolean, selecte
     }`;
 
 
-export const ListItemColor = styled.li<{ selected?: boolean, selectedColor?: any}>`
+export const ListItemColor = styled.li<{ selected?: boolean, selectedColor?: any }>`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -141,8 +142,8 @@ export const ListItemColor = styled.li<{ selected?: boolean, selectedColor?: any
     cursor: pointer;
     margin: 0 11px;
     border-radius: 100%;
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     white-space: nowrap;  
     font-size: 12px;  
     border-color: ${props => props.selected ? 'black' : '#DDD'};
@@ -171,7 +172,7 @@ export const ListItemColor = styled.li<{ selected?: boolean, selectedColor?: any
     }`;
 
 
-    export const ListItemColorBig = styled.li<{ selected?: boolean, selectedColor?: any}>`
+export const ListItemColorBig = styled.li<{ selected?: boolean, selectedColor?: any }>`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -210,14 +211,15 @@ export const ListItemColor = styled.li<{ selected?: boolean, selectedColor?: any
      }
     }`;
 
- 
- export const ListItemImage = styled.img<{ selected?: any }>`
-    width: 40px;
-    height: 40px;
+
+export const ListItemImage = styled.img<{ selected?: any }>`
+    width: 60px;
+    height: 60px;
     object-fit: contain;
     margin: 0px 11px;
     border-radius: 100%;
-    border: 1px solid rgb(168 161 161);
+    border: 3px solid ${props => props.selected ? '#000' : '#DDD'} ;
+    /* border-color: ${props => props.selected ? '#000' : '#DDD'}; */
     
     @media screen and (max-width: 568px) {
       width: 36px;

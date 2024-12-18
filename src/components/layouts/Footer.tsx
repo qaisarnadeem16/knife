@@ -356,17 +356,10 @@ const Footer = () => {
 
 					{/* Add to cart */}
 					{/* {isBuyVisibleForQuoteRule && !isViewerMode && ( */}
-					<AddToCartButton
+					{/* <AddToCartButton
 						ref={addToCartButtonRef}
-						//onPointerEnter={() => {
-						// 	if (isAddToCartDisabled) openOutOfStockTooltip(addToCartButtonRef.current!, 'top', 'top');
-						// }}
-						// onPointerLeave={() => {
-						// 	closeOutOfStockTooltip();
-						// }}
 						disabled={isAddToCartDisabled}
 						primary
-						//onClick={!isAddToCartDisabled ? () => handleAddToCart() : () => null}
 						onClick={() => handleGetQuoteClick()}
 					>
 						{isAddToCartLoading && <TailSpin color='#FFFFFF' height='25px' />}
@@ -378,7 +371,7 @@ const Footer = () => {
 							</span>
 						)}
 						{!isAddToCartLoading && isOutOfStock && <span>{T._('OUT OF STOCK', 'Composer')}</span>}
-					</AddToCartButton>
+					</AddToCartButton> */}
 					{/* )} */}
 				</FooterRightElementsContainer>
 			</>

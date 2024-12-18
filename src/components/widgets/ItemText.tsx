@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, JSX, useCallback } from "react";
 import styled from "styled-components/macro";
 import { FontFamily, useZakeke } from 'zakeke-configurator-react';
 import { Button, Columns, Icon, TextArea } from '../Atomic';

@@ -9,7 +9,7 @@ import {
   useZakeke,
 } from "zakeke-configurator-react";
 import useStore from "../../Store";
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState, JSX } from "react";
 import Select, {
   GroupBase,
   OptionProps,

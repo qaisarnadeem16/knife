@@ -1,4 +1,4 @@
-import { ProductQuantityRule, useZakeke, ZakekeViewer } from 'zakeke-configurator-react';
+import { ProductQuantityRule, TryOnMode, useZakeke, ZakekeViewer } from 'zakeke-configurator-react';
 import { Button } from '../Atomic';
 import {
 	findAttribute,
@@ -20,23 +20,36 @@ import { ReactComponent as ExplodeSolid } from '../../assets/icons/arrow-left-so
 
 import { ReactComponent as SearchMinusSolid } from '../../assets/icons/search-minus-solid.svg';
 import { ReactComponent as SearchPlusSolid } from '../../assets/icons/search-plus-solid.svg';
-import { Dialog, useDialogManager } from '../dialog/Dialogs';
+import { Dialog, QuestionDialog, useDialogManager } from '../dialog/Dialogs';
 import {
 	BottomRightIcons,
 	CollapseIcon,
 	ExplodeIcon,
+	FooterMobileIcon,
+	FullscreenArrowIcon,
 	FullscreenIcon,
+	MobileFooterContainer,
 	RecapPanelIcon,
 	SecondScreenIcon,
-	TopRightIcons,	
+	TopRightIcons,
 	ViewerContainer,
 	ZoomInIcon,
 	ZoomOutIcon
 } from './LayoutStyled';
+import NftDialog, { NftForm } from '../dialog/NftDialog';
+import QuantityDialog from '../dialog/QuanityDialog';
+import { TailSpin } from 'react-loader-spinner';
+import useDropdown from '../hooks/useDropdown';
+import { ReactComponent as SaveSolid } from '../../assets/icons/save-filled.svg';
+import { ReactComponent as CartSolid } from '../../assets/icons/cart-filler.svg';
+import { ReactComponent as ArrowUpSimple } from '../../assets/icons/up-arrow-simple.svg';
+import { ReactComponent as ArrowDownSimple } from '../../assets/icons/down-arrow-simple.svg';
+import SaveDesignsDraftDialog from '../dialog/SaveDesignsDraftDialog';
 
 
 const Viewer = () => {
 	const ref = useRef<HTMLDivElement | null>(null);
+	const addToCartButtonRef = useRef<HTMLDivElement>(null);
 	const {
 		isSceneLoading,
 		IS_IOS,
@@ -50,15 +63,55 @@ const Viewer = () => {
 		reset,
 		openSecondScreen,
 		product,
-		price,
 		hasExplodedMode,
-		setExplodedMode
+		setExplodedMode,
+		hasVTryOnEnabled,
+		getTryOnSettings,
+		isInfoPointContentVisible,
+		visibleEventMessages,
+		eventMessages,
+		isMandatoryPD,
+		isAIEnabled,
+		nftSettings,
+		price,
+		useLegacyScreenshot,
+		addToCart,
+		setCameraByName,
+		getPDF,
+		groups,
+		saveComposition,
+		createQuote,
+		isAddToCartLoading,
+		isOutOfStock,
 	} = useZakeke();
+
+	const {
+		// setIsLoading,
+		selectedGroupId,
+		setSelectedGroupId,
+		selectedAttributeId,
+		setSelectedTemplateGroupId,
+		selectedTemplateGroupId,
+		selectedStepId,
+		setSelectedAttributeId,
+		priceFormatter,
+		setIsQuoteLoading,
+		isQuoteLoading,
+		isViewerMode,
+		isDraftEditor,
+		isEditorMode,
+		setTryOnMode,
+		tryOnRef,
+		setIsPDStartedFromCart,
+		pdValue,
+		isMobile,
+		setSelectedStepId,
+	} = useStore();
 
 	const [isRecapPanelOpened, setRecapPanelOpened] = useState(
 		sellerSettings?.isCompositionRecapVisibleFromStart ?? false
 	);
-
+	const [openOutOfStockTooltip, , isOutOfStockTooltipVisible, Dropdown] = useDropdown();
 	const { showDialog, closeDialog } = useDialogManager();
 	const { setIsLoading } = useStore();
 
@@ -80,15 +133,14 @@ const Viewer = () => {
 		} else {
 			launchFullscreen(ref.current!);
 		}
-	};	
+	};
 
 	const { setIsUndo, undoStack, setIsRedo, redoStack } = useStore();
-	const undoRedoActions = useUndoRedoActions();	
+	const undoRedoActions = useUndoRedoActions();
 
 	const { undo, redo } = useZakeke();
-	const { setSelectedGroupId, setSelectedStepId, setSelectedAttributeId, isMobile } = useStore();
 
-	const actualGroups = useActualGroups() ?? [];		
+	const actualGroups = useActualGroups() ?? [];
 
 	const handleRedoSingleStep = (actualRedoStep: { type: string; id: number | null; direction: string }) => {
 		if (actualRedoStep.id === null && !isMobile) return;
@@ -101,40 +153,176 @@ const Viewer = () => {
 		else if (actualRedoStep.type === 'option') return redo();
 	};
 
+	const isBuyVisibleForQuoteRule = product?.quoteRule ? product.quoteRule.allowAddToCart : true;
+	const [disableButtonsByVisibleMessages, setDisableButtonsByVisibleMessages] = useState(false);
+
+	useEffect(() => {
+		if (visibleEventMessages && visibleEventMessages.some((msg) => msg.addToCartDisabledIfVisible))
+			setDisableButtonsByVisibleMessages(true);
+		else setDisableButtonsByVisibleMessages(false);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [visibleEventMessages]);
+
+	const handleAddToCart = () => {
+		const cartMessage = eventMessages?.find((message) => message.eventID === 4);
+		if (isMandatoryPD && pdValue < 1) {
+			setIsPDStartedFromCart(true);
+			tryOnRef?.current?.setVisible?.(true);
+			tryOnRef?.current?.changeMode?.(TryOnMode.PDTool);
+			setTryOnMode(TryOnMode.PDTool);
+			return;
+		}
+		if (cartMessage && cartMessage.visible && !isDraftEditor && !isEditorMode)
+			showDialog(
+				'question',
+				<QuestionDialog
+					alignButtons='center'
+					eventMessage={cartMessage?.description}
+					buttonNoLabel={T._('Cancel', 'Composer')}
+					buttonYesLabel={T._('Add to cart', 'Composer')}
+					onYesClick={() => {
+						if (nftSettings && nftSettings.isNFTEnabled && !isDraftEditor)
+							showDialog(
+								'nft',
+								<NftDialog
+									nftTitle={T._(
+										"You're purchasing a customized product together with an NFT.",
+										'Composer'
+									)}
+									nftMessage={T._(
+										'To confirm and mint your NFT you need an active wallet compatible with Ethereum. Confirm and add your email and wallet address.',
+										'Composer'
+									)}
+									buttonNoLabel={T._('Skip and continue', 'Composer')}
+									buttonYesLabel={T._('Confirm and Purchase', 'Composer')}
+									price={nftSettings.priceToAdd + price}
+									onYesClick={(nftForm: NftForm) => {
+										closeDialog('nft');
+										addToCart([], undefined, useLegacyScreenshot, nftForm);
+									}}
+									onNoClick={() => {
+										closeDialog('nft');
+										addToCart([], undefined, useLegacyScreenshot);
+									}}
+								/>
+							);
+						else addToCart([], undefined, useLegacyScreenshot);
+						closeDialog('question');
+					}}
+				/>
+			);
+		else if (nftSettings && nftSettings.isNFTEnabled && !isDraftEditor)
+			showDialog(
+				'nft',
+				<NftDialog
+					nftTitle={T._("You're purchasing a customized product together with an NFT.", 'Composer')}
+					nftMessage={T._(
+						'To confirm and mint your NFT you need an active wallet compatible with Ethereum. Confirm and add your email and wallet address.',
+						'Composer'
+					)}
+					price={nftSettings.priceToAdd + price}
+					buttonNoLabel={T._('Skip and continue', 'Composer')}
+					buttonYesLabel={T._('Confirm and Purchase', 'Composer')}
+					onYesClick={(nftForm: NftForm) => {
+						closeDialog('nft');
+						addToCart([], undefined, useLegacyScreenshot, nftForm);
+					}}
+					onNoClick={() => {
+						closeDialog('nft');
+						addToCart([], undefined, useLegacyScreenshot);
+					}}
+				/>
+			);
+		else if (product && product.quantityRule)
+			showDialog(
+				'quantity',
+				<QuantityDialog
+					quantityRule={product.quantityRule}
+					onClick={() => {
+						closeDialog('quantity');
+						addToCart([], undefined, useLegacyScreenshot);
+					}}
+				/>
+			);
+		else {
+			addToCart([], undefined, useLegacyScreenshot);
+		}
+	};
+
+	const handleSaveClick = async () => {
+		showDialog('save', <SaveDesignsDraftDialog onCloseClick={() => closeDialog('save')} />);
+	};
+
+
+	const [isFullscreen, setIsFullscreen] = useState(false);
+	const [containerHeight, setContainerHeight] = useState<number | null>(null);
+
+	const switchFullscreenArrows = () => {
+		const viewerContainer = ref.current;
+
+		if (document.fullscreenElement) {
+			document.exitFullscreen().then(() => {
+				setIsFullscreen(false);
+			});
+		} else {
+			setIsFullscreen(true);
+			viewerContainer?.requestFullscreen();
+		}
+	};
+
+
+	useEffect(() => {
+		const handleResize = () => {
+			if (isFullscreen && ref.current) {
+				ref.current.style.height = `${window.innerHeight}px`;
+			}
+		};
+
+		if (isFullscreen) {
+			window.addEventListener('resize', handleResize);
+			handleResize(); // Set initial height on fullscreen
+		} else {
+			window.removeEventListener('resize', handleResize);
+			if (ref.current) ref.current.style.height = 'auto'; // Reset height when exiting fullscreen
+		}
+
+		return () => window.removeEventListener('resize', handleResize);
+	}, [isFullscreen]);
+
 	return (
-		<ViewerContainer ref={ref}>
-			{!isSceneLoading && <ZakekeViewer />}			
-				<>
-				{<div style={{ position: "absolute", top: "0.52em", left: "3em", fontWeight: "555"}}>
-					<div>{product?.name}</div>
-					<div>USD {price}</div>	
+		<ViewerContainer ref={ref} className={isFullscreen ? 'fullscreen viewer-container' : 'viewer-container'}>
+			{!isSceneLoading && <ZakekeViewer />}
+			<>
+				{<div className='md:left-[3rem] left-[1rem] md:top-[.52rem] top-[1rem]' style={{ position: "absolute", fontWeight: "555" }}>
+					<div className='md:block hidden'>{product?.name}</div>
+					<div>USD {price}</div>
 				</div>}
-					<ZoomInIcon isMobile={isMobile} key={'zoomin'} hoverable onClick={zoomIn}>
-						<SearchPlusSolid />
-					</ZoomInIcon>
-					<ZoomOutIcon isMobile={isMobile} key={'zoomout'} hoverable onClick={zoomOut}>
-						<SearchMinusSolid />
-					</ZoomOutIcon>
-										
-					<BottomRightIcons>
-						{hasExplodedMode() && product && !isSceneLoading && (
-							<>
-								<CollapseIcon hoverable onClick={() => setExplodedMode(false)}>
-									<CollapseSolid />
-								</CollapseIcon>
-								<ExplodeIcon hoverable onClick={() => setExplodedMode(true)}>
-									<ExplodeSolid />
-								</ExplodeIcon>
-							</>
-						)}
+				<ZoomInIcon isMobile={isMobile} key={'zoomin'} hoverable onClick={zoomIn}>
+					<SearchPlusSolid />
+				</ZoomInIcon>
+				<ZoomOutIcon isMobile={isMobile} key={'zoomout'} hoverable onClick={zoomOut}>
+					<SearchMinusSolid />
+				</ZoomOutIcon>
 
-						{product && product.isShowSecondScreenEnabled && (
-							<SecondScreenIcon key={'secondScreen'} hoverable onClick={openSecondScreen}>
-								<DesktopSolid />
-							</SecondScreenIcon>
-						)}
+				<BottomRightIcons>
+					{hasExplodedMode() && product && !isSceneLoading && (
+						<>
+							<CollapseIcon hoverable onClick={() => setExplodedMode(false)}>
+								<CollapseSolid />
+							</CollapseIcon>
+							<ExplodeIcon hoverable onClick={() => setExplodedMode(true)}>
+								<ExplodeSolid />
+							</ExplodeIcon>
+						</>
+					)}
 
-						{/* {!IS_IOS && (
+					{product && product.isShowSecondScreenEnabled && (
+						<SecondScreenIcon key={'secondScreen'} hoverable onClick={openSecondScreen}>
+							<DesktopSolid />
+						</SecondScreenIcon>
+					)}
+
+					{/* {!IS_IOS && (
 							<FullscreenIcon
 								className='fullscreen-icon'
 								key={'fullscreen'}
@@ -144,15 +332,83 @@ const Viewer = () => {
 								<ExpandSolid />
 							</FullscreenIcon>
 						)} */}
-					</BottomRightIcons>
-					
-					{sellerSettings?.isCompositionRecapEnabled && (
-						<RecapPanelIcon key={'recap'} onClick={() => setRecapPanelOpened(!isRecapPanelOpened)}>
-							<BarsSolid />
-						</RecapPanelIcon>
-					)}
-					{' '}
-				</>						
+				</BottomRightIcons>
+
+				{!isSceneLoading && !isFullscreen && (
+					<>
+						<MobileFooterContainer $isMobile={isMobile} isQuoteEnable={Boolean(product?.quoteRule)}>
+
+							{/* {sellerSettings?.canSaveDraftComposition && ( */}
+							<FooterMobileIcon isSaved gridArea="save" onClick={handleSaveClick}>
+								<SaveSolid />
+							</FooterMobileIcon>
+
+
+							{/* {isBuyVisibleForQuoteRule && !isViewerMode && ( */}
+							<FooterMobileIcon
+								isCart
+								iconColor='white'
+								color='white'
+								ref={addToCartButtonRef}
+								onPointerEnter={() => {
+									if (isOutOfStock) openOutOfStockTooltip(addToCartButtonRef.current!, 'top', 'top');
+								}}
+								disabled={disableButtonsByVisibleMessages || isAddToCartLoading || isOutOfStock}
+								// backgroundColor='#313c46'
+								onClick={!isAddToCartLoading ? () => handleAddToCart() : () => null}
+							>
+								{isOutOfStock && T._('OUT OF STOCK', 'Composer')}
+
+								{!isOutOfStock &&
+									!isAddToCartLoading &&
+									(isDraftEditor || isEditorMode ? <SaveSolid /> : <CartSolid />)}
+								{isAddToCartLoading && <TailSpin color='#FFFFFF' height='25px' />}
+							</FooterMobileIcon>
+							{/* )} */}
+
+							{/* {product?.quoteRule && !isViewerMode && !isDraftEditor && !isEditorMode && (
+								<FooterMobileIcon
+									gridArea="quote"
+									iconColor="white"
+									color="white"
+									style={{ fontSize: '14px' }}
+									backgroundColor="#313c46"
+									disabled={disableButtonsByVisibleMessages}
+									onClick={handleGetQuoteClick}
+								>
+									{!isQuoteLoading ? (
+										<>
+											<QuoteSolid />
+											{T._('Get a Quote', 'Composer')}
+										</>
+									) : (
+										<TailSpin color="#FFFFFF" height="25px" />
+									)}
+								</FooterMobileIcon>
+							)} */}
+						</MobileFooterContainer>
+
+						{!IS_IOS && !isSceneLoading && (
+							<FullscreenArrowIcon
+								$isMobile={isMobile}
+								className='fullscreen-icon'
+								key={'fullscreen'}
+								hoverable
+								onClick={switchFullscreenArrows}
+							>
+
+								{isFullscreen ? <ArrowUpSimple /> : <ArrowDownSimple />}
+							</FullscreenArrowIcon>
+						)}
+					</>
+				)}
+				{sellerSettings?.isCompositionRecapEnabled && (
+					<RecapPanelIcon key={'recap'} onClick={() => setRecapPanelOpened(!isRecapPanelOpened)}>
+						<BarsSolid />
+					</RecapPanelIcon>
+				)}
+				{' '}
+			</>
 		</ViewerContainer>
 	);
 };

@@ -103,12 +103,13 @@ export const CustomQuotationConfirmMessage = styled(DialogWindow)`
 `;
 
 
-export const ZoomInIcon = styled(Icon)<{ isMobile?: boolean }>`
+export const ZoomInIcon = styled(Icon) <{ isMobile?: boolean }>`
 	position: absolute;
 	left: 20px;
 	width: 32px;
 	height: 32px;
 	z-index: 3;
+	display: ${(props) => (props.isMobile ? 'none' : 'block')};
 	${(props) =>
 		props.isMobile
 			? `
@@ -120,12 +121,13 @@ export const ZoomInIcon = styled(Icon)<{ isMobile?: boolean }>`
 	}
 `;
 
-export const ZoomOutIcon = styled(Icon)<{ isMobile?: boolean }>`
+export const ZoomOutIcon = styled(Icon) <{ isMobile?: boolean }>`
 	position: absolute;
 	left: 20px;
 	width: 32px;
 	height: 32px;
 	z-index: 3;
+    display: ${(props) => (props.isMobile ? 'none' : 'block')};
 	${(props) =>
 		props.isMobile
 			? `
@@ -449,4 +451,105 @@ export const ViewerContainer = styled.div`
 	@media (max-width: 1024px) {
 		height: 100%;
 	}
+`;
+
+
+export const FooterMobileIcon = styled.div<{
+	isHidden?: boolean;
+	color?: string;
+	backgroundColor?: string;
+	iconColor?: string;
+	isCart?: boolean;
+	isSaved?: boolean
+	disabled?: boolean;
+	gridArea?: string;
+	isPrice?: boolean;
+}>`
+	display: flex;
+	align-items: end;
+	justify-content: end;
+	border: 1px transparent solid;
+    width:50px;
+	color: ${(props) => (props.color ? props.color : `#313c46`)};
+	background-color: ${(props) => (props.backgroundColor ? props.backgroundColor : `transparent`)};
+	font-size: 14px;
+	text-transform: uppercase;
+	text-align: center;
+	display: inline-flex;
+	cursor: pointer;
+	font-weight: bold !important;
+
+	svg {
+		fill: ${(props) => props.iconColor && `${props.iconColor}`};
+		width: 32px;
+		height: 32px;
+	}
+
+	${(props) => props.isHidden && `visibility:hidden`};
+
+	${(props) =>
+		props.isCart &&
+		`display: flex;
+        flex-direction: column-reverse;
+        align-items: end;
+        justify-content: end;
+		padding:5px;
+		position:absolute;
+		bottom:.5rem;
+
+		`};
+	${(props) =>
+		props.isSaved &&
+		`
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: end;
+        justify-content: end;
+		padding:5px;
+		position:absolute;
+		bottom:3.2rem;
+		`};
+
+	${(props) =>
+		props.disabled &&
+		`
+      background-color: lightgray;
+      border: 1px solid gray;
+      color: #313c46;
+  `}
+	${(props) => props.gridArea && `grid-area:${props.gridArea}`};
+`;
+
+
+export const MobileFooterContainer = styled.div<{ isQuoteEnable?: boolean, $isMobile?: boolean; }>`
+height: 70px;
+display: ${(props) => (props.$isMobile ? 'flex' : 'none')};
+flex-direction:column;
+align-items: end;
+grid - template - columns: repeat(5, 1fr);
+background - color: #fff;
+font - size: 12px;
+margin - top: 4px;
+border - top: 1px #fff solid;
+grid - template - areas: 'back pdf save share cart';
+	${(props) =>
+		props.isQuoteEnable &&
+		`
+	grid-template-columns: repeat(6, 1fr);
+	grid-template-areas: 'back pdf save share cart quote' 
+	`};
+`;
+
+
+export const FullscreenArrowIcon = styled(Icon) <{ $isMobile?: boolean; }>`
+    position: absolute;
+	bottom:0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 32px;
+    height: 32px;
+	backgroundColor:red;
+    display: ${(props) => (props.$isMobile ? 'flex' : 'none')};
+    align-items: center;
+    justify-content: center;
 `;

@@ -41,7 +41,7 @@ export const NumericInput: FC<{
 	min: number;
 	max: number | undefined;
 	step: number | undefined;
-}> = ({ value,  onChange, min, max, step }) => {
+}> = ({ value, onChange, min, max, step }) => {
 	let ref: HTMLInputElement | null;
 
 	// Event handler for the up arrow click
@@ -88,15 +88,15 @@ export const NumericInput: FC<{
 				min={min}
 				max={max}
 				step={step}
-				ref={(input) => (ref = input ? input : null)}
+			// ref={(input) => (ref = input ? input : null)}
 			/>
 			<NumberInputArrows>
 				<Icon hoverable onClick={handleUpClick}>
 					{/* <UpArrow /> */}
-                    +
+					+
 				</Icon>
 				<Icon hoverable onClick={handleDownClick}>
-                    -
+					-
 					{/* <DownArrow /> */}
 				</Icon>
 			</NumberInputArrows>

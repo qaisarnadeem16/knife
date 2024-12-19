@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { TemplateArea, useZakeke } from 'zakeke-configurator-react';
 import { Button, Icon } from '../Atomic';
@@ -91,7 +91,7 @@ const ItemImage: FC<{ item: ImageItem, handleItemPropChange: any, currentTemplat
     const canEdit = constraints ? constraints.canEdit : true;
 
     const showUploadButton = ((!currentTemplateArea || currentTemplateArea.uploadRestrictions.isUserImageAllowed) && canEdit);
-    const showGalleryButton = (!currentTemplateArea || !currentTemplateArea.disableSellerImages) && canEdit;    
+    const showGalleryButton = (!currentTemplateArea || !currentTemplateArea.disableSellerImages) && canEdit;
 
     return <FormControl
         label={item.name || T._("Image", "Composer")}
@@ -102,7 +102,7 @@ const ItemImage: FC<{ item: ImageItem, handleItemPropChange: any, currentTemplat
                 {showUploadButton && <Button disabled={uploadImgDisabled} isFullWidth onClick={handleChangeClick}>{T._("Image", "Composer")}</Button>}
                 {showGalleryButton && <Button isFullWidth onClick={handleGalleryClick}>{T._("Gallery", "Composer")}</Button>}
             </ButtonsContainer>
-            <input type="file" ref={input => inputHtml = input!} onChange={handleInputChange} />
+            <input type="file" onChange={handleInputChange} />
         </ImageAndButtonsContainer>
     </FormControl>
 }

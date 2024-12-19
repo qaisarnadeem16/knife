@@ -181,6 +181,7 @@ const MenuItemsWrapper = styled.div <{ displayFlex?: boolean; height?: number, }
 	max-width: 100%;
 	min-height: ${(props) => (props.height !== undefined ? `${props.height}px` : '85px')};
 	width: 100%;
+  gap:5px;
 	overflow-x: auto;
 	background-color: #ffffff;
 	border-top: 1px #ffffff solid;
@@ -274,7 +275,7 @@ export const MobileItemsContainer: FC<MenuItemsContainerProps> = ({
     <MenuItemsWrapper ref={ref} displayFlex={displayFlex} height={height}>
       {showLeftArrow && isLeftArrowVisible && (
         <ArrowLeft>
-          <div className="bg-slate-100  flex items-center justify-center  rounded-full">
+          <div className="bg-slate-100 mt-5 flex items-center justify-center  rounded-full">
             <ArrowLeftIconStyled>
               {/* <ArrowLeftIcon /> */}
               <svg
@@ -298,7 +299,7 @@ export const MobileItemsContainer: FC<MenuItemsContainerProps> = ({
 
       {showRightArrow && isRightArrowVisible && (
         <ArrowRight>
-          <div className="bg-slate-100 flex items-center justify-center  rounded-full">
+          <div className="bg-slate-100 mt-5 flex items-center justify-center  rounded-full">
             <ArrowRightIconStyled>
               {/* <ArrowRightIcon /> */}
               <svg

@@ -543,12 +543,12 @@ grid - template - areas: 'back pdf save share cart';
 
 export const FullscreenArrowIcon = styled(Icon) <{ $isMobile?: boolean; }>`
     position: absolute;
-	bottom:0;
+	bottom:70px;
     left: 50%;
+	z-index: 3;
     transform: translate(-50%, -50%);
     width: 32px;
     height: 32px;
-	backgroundColor:red;
     display: ${(props) => (props.$isMobile ? 'flex' : 'none')};
     align-items: center;
     justify-content: center;

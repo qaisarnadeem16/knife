@@ -297,7 +297,7 @@ const Viewer = () => {
 			{!IS_IOS && !isSceneLoading && (
 				<FullscreenArrowIcon
 					$isMobile={isMobile}
-					className='fullscreen-icon bg-red-800'
+					className='fullscreen-icon'
 					key={'fullscreen'}
 					hoverable
 					title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}

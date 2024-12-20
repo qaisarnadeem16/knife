@@ -228,8 +228,8 @@ s .tray-preview-open-button {
 }
 
 .swiper {
-  width: 80vw !important;
-  height: 64px !important;
+  width: 60vw !important;
+  /* height: 64px !important; */
   position: initial !important;
   /* height: 120% !important  ; */
 }
@@ -248,7 +248,7 @@ s .tray-preview-open-button {
 }
 .swiper-slide {
   text-align: center;
-  width: 60px !important;
+  width: 120px !important;
 }
 
 .swiper-button-next,

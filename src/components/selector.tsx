@@ -692,8 +692,11 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
 
                                             />
                                           )}
+                                          <p className="text-[10px] pt-1 max-w-28 w-28 whitespace-normal break-words">
+                                            {atrOpts.name}
+                                          </p>
 
-                                          <div
+                                          {/* <div
                                             style={{
                                               position: "absolute",
                                               top: "100%",
@@ -702,7 +705,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                                             {atrOpts.id === selectedOptionId
                                               ? atrOpts.name
                                               : ""}
-                                          </div>
+                                          </div> */}
                                         </ListItemColor>
                                       );
                                     }
@@ -767,24 +770,59 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                       selectedGroup.attributes &&
                       selectedGroup.attributes.map((opts, i) => {
                         // if (opts.enabled === false) return <></>;
-                        if (opts.options.length >= 17) {
+                        if (opts.options.length >= 10) {
                           return (
-                            // <Swiper
-                            //   spaceBetween="10px"
-                            //   slidesPerView={10} //20
-                            //   slidesPerGroup={1}
-                            //   pagination={{ clickable: true }}
-                            //   navigation={{
-                            //     nextEl: '.swiper-button-next',
-                            //     prevEl: '.swiper-button-prev',
-                            //   }}
-                            //   modules={[Navigation]}
-                            //   onReachEnd={() => setIsNextDisabled(true)}
-                            // >
-                            //   <div className="swiper-button-prev"></div>
+                            <Swiper
+                              spaceBetween={10} // Space between slides in pixels
+                              slidesPerView={6} // Show 5 items at a time
+                              pagination={{ clickable: true }} // Enable clickable pagination
+                              navigation={{
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                              }}
+                              modules={[Navigation]} // Include Navigation module
+                              onReachEnd={() => setIsNextDisabled(true)} // Disable "Next" button at the end
+                            >
+                              <div className="swiper-button-prev"></div>
+                              {opts.enabled &&
+                                opts.options.map((atrOpts) => (
+                                  <SwiperSlide key={atrOpts.id}>
+                                    <ListItemColor
+                                      onClick={() => {
+                                        selectOption(atrOpts.id);
+                                        selectOptionId(atrOpts.id);
+                                        selectOptionName(atrOpts.name);
+                                      }}
+                                      selected={atrOpts.selected}
+                                      selectedColor={selectedColorName}
+                                    >
+                                      {atrOpts.imageUrl && <ListItemImage src={atrOpts.imageUrl} />}
+                                      <p className="text-[10px] pt-1 max-w-28 w-28 whitespace-normal break-words">
+                                        {atrOpts.name}
+                                      </p>
+
+                                      {/* <div
+                                        style={{
+                                          position: "absolute",
+                                          top: "70%",
+                                        }}
+                                      >
+                                        {atrOpts.id === selectedOptionId ? atrOpts.name : ""}
+                                      </div> */}
+                                    </ListItemColor>
+                                  </SwiperSlide>
+                                ))}
+
+                              <div
+                                className={`swiper-button-next ${isNextDisabled ? "swiper-button-disabled" : ""
+                                  }`}
+                              ></div>
+                            </Swiper>
+
+                            // <div className="max-w-[1100px] items-center justify-center min-w-[500px] flex flex-wrap ">
                             //   {opts.enabled &&
                             //     opts.options.map((atrOpts) => (
-                            //       <SwiperSlide key={atrOpts.id}>
+                            //       <div key={atrOpts.id}>
                             //         <ListItemColor
                             //           onClick={() => {
                             //             selectOption(atrOpts.id);
@@ -795,10 +833,16 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                             //           selectedColor={selectedColorName}
                             //         >
                             //           {atrOpts.imageUrl && (
-                            //             <ListItemImage src={atrOpts.imageUrl} />
+                            //             <ListItemImage src={atrOpts.imageUrl}
+                            //               selected={atrOpts.selected}
+                            //             />
                             //           )}
+                            //           <div className="text-[10px] max-w-28 block text-wrap">{atrOpts.name}</div>
 
-                            //           <div
+                            //           {/* <p className="text-xs">
+                            //             {atrOpts.name}
+                            //           </p> */}
+                            //           {/* <div
                             //             style={{
                             //               position: "absolute",
                             //               top: "70%",
@@ -807,48 +851,11 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                             //             {atrOpts.id === selectedOptionId
                             //               ? atrOpts.name
                             //               : ""}
-                            //           </div>
+                            //           </div> */}
                             //         </ListItemColor>
-                            //       </SwiperSlide>
+                            //       </div>
                             //     ))}
-
-                            //   <div className={`swiper-button-next ${isNextDisabled ? 'swiper-button-disabled' : ''}`}></div>
-                            // </Swiper>
-                            <div className="max-w-[1100px] items-center justify-center min-w-[500px] flex flex-wrap gap-3">
-                              {opts.enabled &&
-                                opts.options.map((atrOpts) => (
-                                  <div key={atrOpts.id}>
-                                    <ListItemColor
-                                      onClick={() => {
-                                        selectOption(atrOpts.id);
-                                        selectOptionId(atrOpts.id);
-                                        selectOptionName(atrOpts.name);
-                                      }}
-                                      selected={atrOpts.selected}
-                                      selectedColor={selectedColorName}
-                                    >
-                                      {atrOpts.imageUrl && (
-                                        <ListItemImage src={atrOpts.imageUrl}
-                                          selected={atrOpts.selected}
-                                        />
-                                      )}
-                                      {/* <p className="text-xs">
-                                        {atrOpts.name}
-                                      </p> */}
-                                      {/* <div
-                                        style={{
-                                          position: "absolute",
-                                          top: "70%",
-                                        }}
-                                      >
-                                        {atrOpts.id === selectedOptionId
-                                          ? atrOpts.name
-                                          : ""}
-                                      </div> */}
-                                    </ListItemColor>
-                                  </div>
-                                ))}
-                            </div>
+                            // </div>
                           );
                         }
                       })}

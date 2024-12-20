@@ -138,19 +138,20 @@ export const ListItemColor = styled.li<{ selected?: boolean, selectedColor?: any
     align-items: center;
     text-align: center;
     justify-content: center;
+    
     // padding: 0px 10px;
     cursor: pointer;
     margin: 0 11px;
     border-radius: 100%;
-    width: 60px;
-    height: 60px;
-    white-space: nowrap;  
+    /* width: 60px;
+    height: 60px; */
+    /* white-space: nowrap;   */
     font-size: 12px;  
     border-color: ${props => props.selected ? 'black' : '#DDD'};
 
-    &:hover {
+    /* &:hover {
         background-color: #D8D8D8;
-    };
+    }; */
     
     &:before {
         content: '';
@@ -182,8 +183,8 @@ export const ListItemColorBig = styled.li<{ selected?: boolean, selectedColor?: 
     cursor: pointer;
     margin: 0 11px;
     border-radius: 20%;
-    width: 100px;
-    height: 100px;
+    /* width: 100px;
+    height: 100px; */
     white-space: nowrap;  
     font-size: 20px;  
     border-color: ${props => props.selected ? 'black' : '#DDD'};

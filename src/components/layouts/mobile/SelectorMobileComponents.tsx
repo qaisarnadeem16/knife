@@ -156,6 +156,7 @@ interface MenuItemsContainerProps {
   onScrollChange: (value: number) => void;
   scrollLeft: number;
   displayFlex?: boolean;
+  justifyContent?: boolean;
   height?: number;
   children?: React.ReactNode;
 }
@@ -176,13 +177,12 @@ interface MenuItemProps {
 }
 
 // Styled component for the wrapper of menu items
-const MenuItemsWrapper = styled.div <{ displayFlex?: boolean; height?: number, }>`
+const MenuItemsWrapper = styled.div <{ displayFlex?: boolean; height?: number, justifyContent?: boolean }>`
 	display: ${(props) => (props.displayFlex ? 'flex' : 'block')};
 	max-width: 100%;
 	min-height: ${(props) => (props.height !== undefined ? `${props.height}px` : '85px')};
 	width: 100%;
-  justify-content:center;
-  gap:5px;
+  justify-content: ${(props) => (props.justifyContent ? 'center' : 'flex-start')};  /* Use 'flex-start' instead of 'start' */
 	overflow-x: auto;
 	background-color: #ffffff;
 	border-top: 1px #ffffff solid;
@@ -242,6 +242,7 @@ export const MobileItemsContainer: FC<MenuItemsContainerProps> = ({
   isRightArrowVisible,
   onScrollChange,
   displayFlex = true,
+  justifyContent = true,
   height = 85,
   scrollLeft
 }) => {
@@ -273,7 +274,7 @@ export const MobileItemsContainer: FC<MenuItemsContainerProps> = ({
   }, []);
 
   return (
-    <MenuItemsWrapper ref={ref} displayFlex={displayFlex} height={height}>
+    <MenuItemsWrapper ref={ref} displayFlex={displayFlex} height={height} justifyContent={justifyContent}>
       {showLeftArrow && isLeftArrowVisible && (
         <ArrowLeft>
           <div className="bg-slate-100 mt-5 flex items-center justify-center  rounded-full">

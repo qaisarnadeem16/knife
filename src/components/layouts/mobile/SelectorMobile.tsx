@@ -512,6 +512,7 @@ const SelectorMobile = () => {
 						isRightArrowVisible={options.length !== 0}
 						scrollLeft={optionsScroll ?? 0}
 						onScrollChange={(value) => setOptionsScroll(value)}
+						justifyContent={!['SCALES', 'Milled Pocket Colors', 'HARDWARE'].includes(selectedGroup?.name)}
 					>
 						{lastSelectedItem?.type === 'attribute' ? (
 							<>

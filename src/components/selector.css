@@ -321,6 +321,11 @@ s .tray-preview-open-button {
   }
 }
 
+.swiper-button-disabled {
+  display: none !important;
+  background-color: #297ca3 !important;
+}
+
 @media screen and (max-width: 568px) {
   .top-nav {
     padding: 16px 8px;

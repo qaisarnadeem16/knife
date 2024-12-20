@@ -132,6 +132,7 @@ const App: FunctionComponent<{}> = () => {
                     : { width: "100vw", height: "80vh", marginTop: "26px" }
                 }
               >
+
                 <ZakekeViewer />
               </div>
             </div>

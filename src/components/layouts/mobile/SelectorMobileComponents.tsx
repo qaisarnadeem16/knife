@@ -181,6 +181,7 @@ const MenuItemsWrapper = styled.div <{ displayFlex?: boolean; height?: number, }
 	max-width: 100%;
 	min-height: ${(props) => (props.height !== undefined ? `${props.height}px` : '85px')};
 	width: 100%;
+  justify-content:center;
   gap:5px;
 	overflow-x: auto;
 	background-color: #ffffff;

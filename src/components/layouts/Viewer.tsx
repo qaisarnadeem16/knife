@@ -307,37 +307,38 @@ const Viewer = () => {
 					{isFullscreen ? <ArrowUpSimple /> : <ArrowDownSimple />}
 				</FullscreenArrowIcon>
 			)}
-			<>
-				{<div className='md:left-[3rem] left-[1rem] md:top-[.52rem] top-[1rem]' style={{ position: "absolute", fontWeight: "555" }}>
-					<div className='md:block hidden'>{product?.name}</div>
-					<div>USD {price}</div>
-				</div>}
-				<ZoomInIcon isMobile={isMobile} key={'zoomin'} hoverable onClick={zoomIn}>
-					<SearchPlusSolid />
-				</ZoomInIcon>
-				<ZoomOutIcon isMobile={isMobile} key={'zoomout'} hoverable onClick={zoomOut}>
-					<SearchMinusSolid />
-				</ZoomOutIcon>
+			{!isSceneLoading && !isFullscreen && (
+				<>
+					{<div className='md:left-[3rem] left-[1rem] md:top-[.52rem] top-[1rem]' style={{ position: "absolute", fontWeight: "555" }}>
+						<div className='md:block hidden'>{product?.name}</div>
+						<div>USD {price}</div>
+					</div>}
+					<ZoomInIcon isMobile={isMobile} key={'zoomin'} hoverable onClick={zoomIn}>
+						<SearchPlusSolid />
+					</ZoomInIcon>
+					<ZoomOutIcon isMobile={isMobile} key={'zoomout'} hoverable onClick={zoomOut}>
+						<SearchMinusSolid />
+					</ZoomOutIcon>
 
-				<BottomRightIcons>
-					{hasExplodedMode() && product && !isSceneLoading && (
-						<>
-							<CollapseIcon hoverable onClick={() => setExplodedMode(false)}>
-								<CollapseSolid />
-							</CollapseIcon>
-							<ExplodeIcon hoverable onClick={() => setExplodedMode(true)}>
-								<ExplodeSolid />
-							</ExplodeIcon>
-						</>
-					)}
+					<BottomRightIcons>
+						{hasExplodedMode() && product && !isSceneLoading && (
+							<>
+								<CollapseIcon hoverable onClick={() => setExplodedMode(false)}>
+									<CollapseSolid />
+								</CollapseIcon>
+								<ExplodeIcon hoverable onClick={() => setExplodedMode(true)}>
+									<ExplodeSolid />
+								</ExplodeIcon>
+							</>
+						)}
 
-					{product && product.isShowSecondScreenEnabled && (
-						<SecondScreenIcon key={'secondScreen'} hoverable onClick={openSecondScreen}>
-							<DesktopSolid />
-						</SecondScreenIcon>
-					)}
+						{product && product.isShowSecondScreenEnabled && (
+							<SecondScreenIcon key={'secondScreen'} hoverable onClick={openSecondScreen}>
+								<DesktopSolid />
+							</SecondScreenIcon>
+						)}
 
-					{/* {!IS_IOS && (
+						{/* {!IS_IOS && (
 							<FullscreenIcon
 								className='fullscreen-icon'
 								key={'fullscreen'}
@@ -347,41 +348,41 @@ const Viewer = () => {
 								<ExpandSolid />
 							</FullscreenIcon>
 						)} */}
-				</BottomRightIcons>
+					</BottomRightIcons>
 
-				{!isSceneLoading && !isFullscreen && (
-					<>
-						<MobileFooterContainer $isMobile={isMobile} isQuoteEnable={Boolean(product?.quoteRule)}>
+					{!isSceneLoading && !isFullscreen && (
+						<>
+							<MobileFooterContainer $isMobile={isMobile} isQuoteEnable={Boolean(product?.quoteRule)}>
 
-							{/* {sellerSettings?.canSaveDraftComposition && ( */}
-							<FooterMobileIcon isSaved gridArea="save" onClick={handleSaveClick}>
-								<SaveSolid />
-							</FooterMobileIcon>
+								{/* {sellerSettings?.canSaveDraftComposition && ( */}
+								<FooterMobileIcon isSaved gridArea="save" onClick={handleSaveClick}>
+									<SaveSolid />
+								</FooterMobileIcon>
 
 
-							{/* {isBuyVisibleForQuoteRule && !isViewerMode && ( */}
-							<FooterMobileIcon
-								isCart
-								iconColor='white'
-								color='white'
-								ref={addToCartButtonRef}
-								onPointerEnter={() => {
-									if (isOutOfStock) openOutOfStockTooltip(addToCartButtonRef.current!, 'top', 'top');
-								}}
-								disabled={disableButtonsByVisibleMessages || isAddToCartLoading || isOutOfStock}
-								// backgroundColor='#313c46'
-								onClick={!isAddToCartLoading ? () => handleAddToCart() : () => null}
-							>
-								{isOutOfStock && T._('OUT OF STOCK', 'Composer')}
+								{/* {isBuyVisibleForQuoteRule && !isViewerMode && ( */}
+								<FooterMobileIcon
+									isCart
+									iconColor='white'
+									color='white'
+									ref={addToCartButtonRef}
+									onPointerEnter={() => {
+										if (isOutOfStock) openOutOfStockTooltip(addToCartButtonRef.current!, 'top', 'top');
+									}}
+									disabled={disableButtonsByVisibleMessages || isAddToCartLoading || isOutOfStock}
+									// backgroundColor='#313c46'
+									onClick={!isAddToCartLoading ? () => handleAddToCart() : () => null}
+								>
+									{isOutOfStock && T._('OUT OF STOCK', 'Composer')}
 
-								{!isOutOfStock &&
-									!isAddToCartLoading &&
-									(isDraftEditor || isEditorMode ? <SaveSolid /> : <CartSolid />)}
-								{isAddToCartLoading && <TailSpin color='#FFFFFF' height='25px' />}
-							</FooterMobileIcon>
-							{/* )} */}
+									{!isOutOfStock &&
+										!isAddToCartLoading &&
+										(isDraftEditor || isEditorMode ? <SaveSolid /> : <CartSolid />)}
+									{isAddToCartLoading && <TailSpin color='#FFFFFF' height='25px' />}
+								</FooterMobileIcon>
+								{/* )} */}
 
-							{/* {product?.quoteRule && !isViewerMode && !isDraftEditor && !isEditorMode && (
+								{/* {product?.quoteRule && !isViewerMode && !isDraftEditor && !isEditorMode && (
 								<FooterMobileIcon
 									gridArea="quote"
 									iconColor="white"
@@ -401,17 +402,18 @@ const Viewer = () => {
 									)}
 								</FooterMobileIcon>
 							)} */}
-						</MobileFooterContainer>
-					</>
-				)}
+							</MobileFooterContainer>
+						</>
+					)}
 
-				{sellerSettings?.isCompositionRecapEnabled && (
-					<RecapPanelIcon key={'recap'} onClick={() => setRecapPanelOpened(!isRecapPanelOpened)}>
-						<BarsSolid />
-					</RecapPanelIcon>
-				)}
-				{' '}
-			</>
+					{sellerSettings?.isCompositionRecapEnabled && (
+						<RecapPanelIcon key={'recap'} onClick={() => setRecapPanelOpened(!isRecapPanelOpened)}>
+							<BarsSolid />
+						</RecapPanelIcon>
+					)}
+					{' '}
+				</>
+			)}
 		</ViewerContainer>
 	);
 };

@@ -258,11 +258,10 @@ s .tray-preview-open-button {
   align-items: start;
 }
 
-.swiper-button-next {
-}
+/* .swiper-button-next {} */
 
 .swiper-button-prev {
-  left: -17px !important;
+  left: -27px !important;
 }
 
 .swiper-button-next::after {

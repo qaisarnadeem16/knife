@@ -30,6 +30,7 @@ const SelectorMobile = () => {
 		setCamera,
 		setTemplate,
 		sellerSettings,
+		groups,
 		selectOption,
 		draftCompositions,
 	} = useZakeke();
@@ -41,6 +42,7 @@ const SelectorMobile = () => {
 		selectedStepId,
 		setSelectedStepId,
 		isUndo,
+		isMobile,
 		isRedo,
 		setSelectedTemplateGroupId,
 		selectedTemplateGroupId,
@@ -54,7 +56,7 @@ const SelectorMobile = () => {
 	const [isDesignsDraftListOpened, setisDesignsDraftListOpened] = useState(false);
 	const [isTemplateGroupOpened, setIsTemplateGroupOpened] = useState(false);
 	const [isStartRegistering, setIsStartRegistering] = useState(false);
-	const [activeGroupIndex, setActiveGroupIndex] = useState(0); // ✅ Call at the top level
+	const [activeGroupIndex, setActiveGroupIndex] = useState(1); // ✅ Call at the top level
 	const [activeIndex, setActiveIndex] = useState(0); // ✅ Call at the top level
 	const [showLeftArrow, setShowLeftArrow] = useState(false); // ✅ Call at the top level
 	const [showRightArrow, setShowRightArrow] = useState(false); // ✅ Call at the top level
@@ -276,23 +278,33 @@ const SelectorMobile = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isStartRegistering]);
 
-
 	useEffect(() => {
 		if (!actualGroups || actualGroups.length === 0) return;
 
 		// Handle single group special case
 		if (actualGroups.length === 1) {
-			if (actualGroups[0].id !== -2 && !selectedGroupId) {
+			if (actualGroups[0].id !== -2 && selectedGroupId !== actualGroups[0].id) {
 				setSelectedGroupId(actualGroups[0].id);
 			}
 			return;
 		}
 
-		// Default to the first group if none is selected
+		// Handle multiple groups - default to the second group and set an option
 		if (!selectedGroupId && actualGroups[0]?.id) {
-			setSelectedGroupId(actualGroups[0].id);
+			setSelectedGroupId(actualGroups[1].id);
+			if (actualGroups[1]?.attributes?.[0]?.options?.[1]) {
+				handleOptionSelection(actualGroups[0].attributes[0].options[1]);
+			}
 		}
+
+		// Default to the first group if no selection and no second group
+		// if (!selectedGroupId && actualGroups[0]?.id && selectedGroupId !== actualGroups[0].id) {
+		// 	setSelectedGroupId(actualGroups[0].id);
+		// }
 	}, [actualGroups, selectedGroupId]);
+
+
+
 
 	const handleGroupSelection = (groupId: number | null) => {
 		setIsStartRegistering(undoRegistering.startRegistering());
@@ -347,6 +359,40 @@ const SelectorMobile = () => {
 		}
 	};
 
+	// useEffect(() => {
+	// 	const initializeCamera = () => {
+	// 		// Check if groups are valid
+	// 		if (!groups || groups.length === 0) {
+	// 			console.warn("Groups are empty or undefined.");
+	// 			return;
+	// 		}
+
+	// 		// Find the camera group
+	// 		const cameraGroup = groups.find((group) => group.name === "Cams");
+	// 		if (!cameraGroup || cameraGroup.attributes.length === 0) {
+	// 			console.warn("Camera group or attributes are missing.");
+	// 			return;
+	// 		}
+
+	// 		// Extract options and determine the default camera
+	// 		const options = cameraGroup.attributes[0].options;
+	// 		const defaultCamera = !isMobile
+	// 			? options.find((option) => option.name === "Desktop cam")
+	// 			: options.find((option) => option.name === "Mobile cam");
+
+	// 		// console.log('dddddddddddd', defaultCamera)
+	// 		if (defaultCamera) {
+	// 			// setCamera(defaultCamera.attribute.cameraLocationId!);
+	// 			handleOptionSelection(defaultCamera);
+	// 		} else {
+	// 			console.warn("No default camera found for the current device.");
+	// 		}
+	// 	};
+
+	// 	// Call initialization logic
+	// 	initializeCamera();
+	// }, [groups]);
+	console.log("Initialization", actualGroups)
 	if (isSceneLoading)
 		return (
 			<PreviewContainer>
@@ -367,15 +413,15 @@ const SelectorMobile = () => {
 
 
 			<div className="flex justify-center bg-gray-50 w-full items-center">
-				{actualGroups.length > 0 && (
+				{actualGroups.length > 1 && (
 					<div className="flex justify-center w-full items-center">
 						{/* Previous Button */}
 						<button
 							onClick={handlePreviousGroup}
-							disabled={activeGroupIndex === 0} // Disable if it's the first group
+							disabled={activeGroupIndex === 1} // Disable if it's the first group
 							className="z-10  "
 						>
-							{activeGroupIndex !== 0 && <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1L1 6.7037L7 12" stroke="black" stroke-linecap="round"></path><path d="M13 1.00049L7 6.70419L13 12.0005" stroke="black" stroke-width="2" stroke-linecap="round"></path></svg>}
+							{activeGroupIndex !== 1 && <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1L1 6.7037L7 12" stroke="black" stroke-linecap="round"></path><path d="M13 1.00049L7 6.70419L13 12.0005" stroke="black" stroke-width="2" stroke-linecap="round"></path></svg>}
 
 						</button>
 
@@ -461,7 +507,7 @@ const SelectorMobile = () => {
 				</TemplatesContainer>
 			)}
 
-			{selectedGroup && selectedGroup.name  && (
+			{selectedGroup && selectedGroup.name && (
 				<MobileItemsContainer
 					isLeftArrowVisible
 					isRightArrowVisible

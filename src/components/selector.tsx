@@ -120,7 +120,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
   const [selectedTrayPreviewOpenButton, selectTrayPreviewOpenButton] =
     useState<boolean>(false);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(1);
 
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -196,9 +196,9 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
     }
 
     if (!selectedGroup && groups.length > 0) {
-      selectGroup(groups[0].id);
+      selectGroup(groups[1].id);
 
-      if (groups[0].steps.length > 0) selectStep(groups[0].steps[0].id);
+      if (groups[1].steps.length > 0) selectStep(groups[1].steps[0].id);
 
       if (templates.length > 0) setTemplate(templates[0].id);
     }
@@ -213,6 +213,44 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedGroup, groups]);
+
+
+
+
+  // useEffect(() => {
+  //   const initializeCamera = () => {
+  //     if (!groups || groups.length === 0) {
+  //       // console.warn("Groups are empty or undefined.");
+  //       return;
+  //     }
+
+  //     const cameraGroup = groups.find((group) => group.name === "Cams");
+  //     if (!cameraGroup || cameraGroup.attributes.length === 0) {
+  //       // console.warn("Camera group or attributes are missing.");
+  //       return;
+  //     }
+
+  //     // Define mobile device breakpoint
+  //     // const isMobileDevice = window.innerWidth <= 768;
+
+  //     const options = cameraGroup.attributes[0].options;
+  //     // console.log("Is mobile device:", isMobileDevice);
+
+  //     const defaultCamera = isMobile
+  //       ? options.find((option) => option.name === "Desktop cam") : options.find((option) => option.name === "Mobile cam")
+  //     // console.log("defaultCamera", defaultCamera)
+  //     if (defaultCamera) {
+  //       selectOption(defaultCamera.id);
+  //       selectOptionId(defaultCamera.id);
+  //       selectOptionName(defaultCamera.name);
+  //     } else {
+  //       console.warn("No default camera found for the current device.");
+  //     }
+  //   };
+
+  //   // Call initialization logic
+  //   initializeCamera();
+  // }, [groups]);
 
   // useEffect(() => {
   // 	const textItems = items.filter((item) => item.type === 0) // as TextItem[];
@@ -339,22 +377,12 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
     width: "100%",
     height: !selectedTrayPreviewOpenButton ? "12rem" : "70px",
   };
-  const getTooltipDetail = (name: string) => {
-    switch (name) {
-      case "Shelter":
-        return "Select various sizes for Shelter.";
-      case "Shelter Colors":
-        return "Choose colors available for Shelter.";
-      case "Wheels":
-        return "Select from different types of wheels.";
-      case "Seats":
-        return "Choose seats available in various styles.";
-      case "Shelter Logo":
-        return "Add custom logos to your Shelter.";
-      default:
-        return "Explore options available for this category.";
-    }
-  };
+
+
+
+
+
+
   const observerErrorHandler = (error: { message: string; }) => {
     if (error.message === "ResizeObserver loop completed with undelivered notifications.") {
       return;
@@ -363,7 +391,12 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
   };
   window.addEventListener("error", observerErrorHandler);
 
-  console.log('selectedGroup', selectedGroup)
+
+
+
+
+  // console.log('selectedGroup', selectedGroup)
+  // console.log('Group', groups)
   // console.log('selectOptionName', selectedOptionName)
   return (
     <>
@@ -454,7 +487,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                 justifyContent: "center",
               }}
             >
-              {currentIndex + 1 !== 1 ?
+              {currentIndex > 1 ?
                 <button
                   className="previous-customization"
                   onClick={handleLeftClick}
@@ -774,7 +807,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                           return (
                             <Swiper
                               spaceBetween={10} // Space between slides in pixels
-                              slidesPerView={6} // Show 5 items at a time
+                              slidesPerView={10} // Show 5 items at a time
                               pagination={{ clickable: true }} // Enable clickable pagination
                               navigation={{
                                 nextEl: '.swiper-button-next',

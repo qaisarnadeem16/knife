@@ -807,7 +807,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                           return (
                             <Swiper
                               spaceBetween={10} // Space between slides in pixels
-                              slidesPerView={10} // Show 5 items at a time
+                              slidesPerView={7} // Show 5 items at a time
                               pagination={{ clickable: true }} // Enable clickable pagination
                               navigation={{
                                 nextEl: '.swiper-button-next',

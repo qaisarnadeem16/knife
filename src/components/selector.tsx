@@ -824,7 +824,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                                   slidesPerView: 9, // On screens >= 1024px, show 12 items
                                 },
                                 2000: {
-                                  slidesPerView: 10, // On screens >= 1024px, show 12 items
+                                  slidesPerView: 12, // On screens >= 1024px, show 12 items
                                 },
                               }}
                               modules={[Navigation]} // Include Navigation module

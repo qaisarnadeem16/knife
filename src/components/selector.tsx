@@ -821,7 +821,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                                   slidesPerView: 7, // On screens >= 1024px, show 12 items
                                 },
                                 1700: {
-                                  slidesPerView: 8, // On screens >= 1024px, show 12 items
+                                  slidesPerView: 9, // On screens >= 1024px, show 12 items
                                 },
                                 2000: {
                                   slidesPerView: 10, // On screens >= 1024px, show 12 items

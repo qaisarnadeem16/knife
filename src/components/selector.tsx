@@ -807,11 +807,25 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                           return (
                             <Swiper
                               spaceBetween={10} // Space between slides in pixels
-                              slidesPerView={7} // Show 5 items at a time
+                              // slidesPerView={7} // Show 5 items at a time
                               pagination={{ clickable: true }} // Enable clickable pagination
                               navigation={{
                                 nextEl: '.swiper-button-next',
                                 prevEl: '.swiper-button-prev',
+                              }}
+                              breakpoints={{
+                                768: {
+                                  slidesPerView: 7, // On screens >= 768px, show 7 items
+                                },
+                                1024: {
+                                  slidesPerView: 8, // On screens >= 1024px, show 12 items
+                                },
+                                1700: {
+                                  slidesPerView: 9, // On screens >= 1024px, show 12 items
+                                },
+                                2000: {
+                                  slidesPerView: 12, // On screens >= 1024px, show 12 items
+                                },
                               }}
                               modules={[Navigation]} // Include Navigation module
                               onReachEnd={() => setIsNextDisabled(true)} // Disable "Next" button at the end

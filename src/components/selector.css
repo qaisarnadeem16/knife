@@ -383,6 +383,7 @@ s .tray-preview-open-button {
     width: 136% !important;
     height: 80px;
     text-align: center;
+
     /* transform: translateX(calc(-66.6667% - 0px)); */
     /* position: absolute; */
     /* justify-content: center; */

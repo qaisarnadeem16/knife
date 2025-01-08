@@ -95,7 +95,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
   const { setIsLoading, isMobile } = useStore();
 
   // Keep saved the ID and not the refereces, they will change on each update
-  const [selectedGroupId, selectGroup] = useState<number | null>(null);
+  const [selectedGroupId, selectGroup] = useState(1);
   const [selectedStepId, selectStep] = useState<number | null>(null);
   const [selectedAttributeId, selectAttribute] = useState<number | null>(null);
   const [selectedOptionId, selectOptionId] = useState<number | null>(null);
@@ -305,13 +305,15 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
   // -- -- attributes
   // -- -- -- options
 
-  const handleGroupSelect = () => {
-    if (items.filter((item) => item.type === 0).length === 0) {
-      if (groups[groups.length - 1].name === "MODALITATE IMPRIMARE")
-        if (items?.filter((item) => item.type === 0)) {
-          groups.splice(groups.length - 1, 1);
-        }
-    }
+  const handleGroupSelect = (id: number) => {
+    // if (items.filter((item) => item.type === 0).length === 0) {
+    //   if (groups[groups.length - 1].name === "MODALITATE IMPRIMARE")
+    //     if (items?.filter((item) => item.type === 0)) {
+    //       groups.splice(groups.length - 1, 1);
+    //     }
+    // }
+    selectGroup(id);
+    selectGroupIdFromTray(id);
   };
 
 
@@ -498,35 +500,44 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                         flexDirection: "row",
                         gap: "20px",
                         justifyContent: "center",
+                        marginTop: "20px"
+
                       }}
                     >
-                      {groups
-                        .slice(currentIndex)
-                        .map((group, index) => (
+                      {groups.slice(currentIndex).map((group, index) => {
+                        return (
                           <div
-                            key={group.id ?? index}
-                            onClick={handleGroupSelect}
+                            key={group.id} // Use group.id or fallback to index for the key
+                            onClick={() => handleGroupSelect(group.id)} // Assuming `handleGroupSelect` updates `selectGroup`
                             style={{
                               display: "flex",
+                              // flexDirection: "column",
                               alignItems: "center",
                               justifyContent: "center",
-                              padding: "10px",
-                              gap:'3px',
+                              padding: "4px",
+                              // margin: "5px",
+                              borderRadius: "10px",
+                              gap: "5px",
                               textAlign: "center",
-                              cursor: 'pointer'
+                              cursor: "pointer",
+                              backgroundColor: selectedGroupId === group.id ? "rgb(229, 229, 229)" : "transparent", // Apply background conditionally
+                              fontWeight: selectedGroupId === group.id ? "600" : "400", // Apply background conditionally
+
                             }}
                           >
                             <img
-                              src={group.imageUrl ?? noImage}
-                              alt={group.name || "Group"}
+                              src={group.imageUrl ?? noImage} // Fallback to noImage if imageUrl is null/undefined
+                              alt={group.name || "Group"} // Fallback alt text if name is null/undefined
                               className="w-8 h-14 object-contain rounded-full"
-                              style={{ marginBottom: "10px" }}
+                              style={{
+                                marginBottom: "0px"
+                              }} // Adjust marginBottom for spacing
                             />
-                            <div>
-                              {group.name}
-                            </div>
+                            <div>{group.name}</div>
                           </div>
-                        ))}
+                        );
+                      })}
+
                     </div>
                   </div>
 
@@ -948,7 +959,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
             )}
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 };

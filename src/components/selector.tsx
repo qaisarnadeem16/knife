@@ -305,11 +305,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
   // -- -- attributes
   // -- -- -- options
 
-  const handleLeftClick = () => {
-    selectColorName("");
-    setCurrentIndex((currentIndex - 1 + groups.length) % groups.length);
-    selectGroup(groups[(currentIndex - 1 + groups.length) % groups.length].id);
-
+  const handleGroupSelect = () => {
     if (items.filter((item) => item.type === 0).length === 0) {
       if (groups[groups.length - 1].name === "MODALITATE IMPRIMARE")
         if (items?.filter((item) => item.type === 0)) {
@@ -318,18 +314,6 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
     }
   };
 
-  const handleRightClick = () => {
-    selectColorName("");
-    setCurrentIndex((currentIndex + 1) % groups.length);
-    selectGroup(groups[(currentIndex + 1) % groups.length].id);
-
-    if (items.filter((item) => item.type === 0).length === 0) {
-      if (groups[groups.length - 1].name === "MODALITATE IMPRIMARE")
-        if (items?.filter((item) => item.type === 0)) {
-          groups.splice(groups.length - 1, 1);
-        }
-    }
-  };
 
   const toggleTray = () => {
     if (selectedTrayPreviewOpenButton) {
@@ -476,9 +460,9 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
             <div
               style={{
                 display: "flex",
-                width: "420px",
                 top: "50%",
                 left: "50%",
+                width: '100%',
                 height: "auto",
                 margin: "0px auto",
                 position: "absolute",
@@ -487,7 +471,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                 justifyContent: "center",
               }}
             >
-              {currentIndex > 1 ?
+              {/* {currentIndex > 1 ?
                 <button
                   className="previous-customization"
                   onClick={handleLeftClick}
@@ -496,7 +480,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                     <AngleLeftSolid />
                     Back
                   </div>
-                </button> : ''}
+                </button> : ''} */}
 
               {/* {!(selectedOptionName === "Add" && groups[currentIndex]?.name === "Shelter Logo") && ( */}
               <div className="tray-header-1">
@@ -507,36 +491,43 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                     width: "100%",
                   }}
                 >
-                  <div className="active-marketing-component-name">
-                    <span
+                  <div >
+                    <div
                       style={{
-                        whiteSpace: "nowrap",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                        lineHeight: "28px",
-                        cursor: "pointer",
-                        display: 'flex',
-                        alignItems: "center",
-                        gap: '10px'
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "20px",
+                        justifyContent: "center",
                       }}
                     >
-                      {/* <MenuItemImagesImage
-                        // isRound={groups[currentIndex]?.isRound}
-                        src={groups[currentIndex]?.imageUrl ? groups[currentIndex]?.imageUrl : noImage}
-                        alt={groups[currentIndex]?.name}
-                        loading='lazy'
-                      /> */}
-                      <img
-                        src={groups[currentIndex]?.imageUrl ?? undefined}
-                        alt=""
-                        className="w-10 h-16 object-contain rounded-full"
-                      />
-
-                      {/* Group name dynamically displayed */}
-                      {groups[currentIndex]?.name}
-
-
-                    </span>
+                      {groups
+                        .slice(currentIndex)
+                        .map((group, index) => (
+                          <div
+                            key={group.id ?? index}
+                            onClick={handleGroupSelect}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              padding: "10px",
+                              gap:'3px',
+                              textAlign: "center",
+                              cursor: 'pointer'
+                            }}
+                          >
+                            <img
+                              src={group.imageUrl ?? noImage}
+                              alt={group.name || "Group"}
+                              className="w-8 h-14 object-contain rounded-full"
+                              style={{ marginBottom: "10px" }}
+                            />
+                            <div>
+                              {group.name}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
                   </div>
 
                   {/* Tooltip styling for future use */}
@@ -554,14 +545,14 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
               </div>
               {/* )} */}
 
-              {currentIndex + 1 !== groups.length && (
+              {/* {currentIndex + 1 !== groups.length && (
                 <button className="next-customization" onClick={handleRightClick}>
                   <div className="mc-prev">
                     Next
                     <AngleRightSolid />
                   </div>
                 </button>
-              )}
+              )} */}
 
             </div>
 

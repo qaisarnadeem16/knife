@@ -21,12 +21,12 @@ import Tooltip from "../../widgets/tooltip";
 
 export const MobileItemContainer = styled.div<{ selected?: boolean }>`
 	align-items: center;
-	min-width: 95px;
-	max-width: 95px;
-	width: 95px;
-	height: 120px;
-	min-height: 120px;
-	max-height: 120px;
+	min-width: 100px;
+	max-width: 100px;
+	width: 100px;
+	height: 115px;
+	min-height: 115px;
+	max-height: 115px;
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -69,8 +69,8 @@ export const MobileItemContainer = styled.div<{ selected?: boolean }>`
 
 // Styled component for the image of each menu item
 export const MenuItemImage = styled.img<{ isRound?: boolean }>`
-	width: 45px;
-	height: 45px;
+	width: 55px;
+	height: 55px;
 	object-fit: ${(props) => (props.isRound ? 'cover' : 'contain')};
 	/* margin-bottom: 20px; */
 	border-radius: ${(props) => (props.isRound ? '64px!important' : '0')};
@@ -185,7 +185,7 @@ const MenuItemsWrapper = styled.div <{ displayFlex?: boolean; height?: number, j
 	width: 100%;
   justify-content: ${(props) => (props.justifyContent ? 'center' : 'flex-start')};  /* Use 'flex-start' instead of 'start' */
 	overflow-x: auto;
-	border-top: 1px #ffffff solid;
+	// border-top: 1px #ffffff solid;
 	-ms-overflow-style: none; /* IE and Edge */
 	scrollbar-width: none; /* Firefox */
 

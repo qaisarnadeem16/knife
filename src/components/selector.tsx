@@ -533,7 +533,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                                 marginBottom: "0px"
                               }} // Adjust marginBottom for spacing
                             />
-                            <div>{group.name}</div>
+                            <div>{index + 1}.{group.name}</div>
                           </div>
                         );
                       })}

@@ -21,12 +21,12 @@ import Tooltip from "../../widgets/tooltip";
 
 export const MobileItemContainer = styled.div<{ selected?: boolean }>`
 	align-items: center;
-	min-width: 80px;
-	max-width: 80px;
-	width: 80px;
-	height: 75px;
-	min-height: 75px;
-	max-height: 75px;
+	min-width: 95px;
+	max-width: 95px;
+	width: 95px;
+	height: 120px;
+	min-height: 120px;
+	max-height: 120px;
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -179,12 +179,12 @@ interface MenuItemProps {
 // Styled component for the wrapper of menu items
 const MenuItemsWrapper = styled.div <{ displayFlex?: boolean; height?: number, justifyContent?: boolean }>`
 	display: ${(props) => (props.displayFlex ? 'flex' : 'block')};
+  gap:5px;
 	max-width: 100%;
-	min-height: ${(props) => (props.height !== undefined ? `${props.height}px` : '85px')};
+	min-height: ${(props) => (props.height !== undefined ? `${props.height}px` : '95px')};
 	width: 100%;
   justify-content: ${(props) => (props.justifyContent ? 'center' : 'flex-start')};  /* Use 'flex-start' instead of 'start' */
 	overflow-x: auto;
-	background-color: #ffffff;
 	border-top: 1px #ffffff solid;
 	-ms-overflow-style: none; /* IE and Edge */
 	scrollbar-width: none; /* Firefox */
@@ -243,7 +243,7 @@ export const MobileItemsContainer: FC<MenuItemsContainerProps> = ({
   onScrollChange,
   displayFlex = true,
   justifyContent = true,
-  height = 85,
+  height = 95,
   scrollLeft
 }) => {
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -277,7 +277,7 @@ export const MobileItemsContainer: FC<MenuItemsContainerProps> = ({
     <MenuItemsWrapper ref={ref} displayFlex={displayFlex} height={height} justifyContent={justifyContent}>
       {showLeftArrow && isLeftArrowVisible && (
         <ArrowLeft>
-          <div className="bg-slate-100 mt-5 flex items-center justify-center  rounded-full">
+          <div className="bg-slate-100  flex items-center justify-center  rounded-full">
             <ArrowLeftIconStyled>
               {/* <ArrowLeftIcon /> */}
               <svg
@@ -301,7 +301,7 @@ export const MobileItemsContainer: FC<MenuItemsContainerProps> = ({
 
       {showRightArrow && isRightArrowVisible && (
         <ArrowRight>
-          <div className="bg-slate-100 mt-5 flex items-center justify-center  rounded-full">
+          <div className="bg-slate-100  flex items-center justify-center  rounded-full">
             <ArrowRightIconStyled>
               {/* <ArrowRightIcon /> */}
               <svg

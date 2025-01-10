@@ -426,7 +426,7 @@ const SelectorMobile = () => {
 			)}
 
 
-			<div className="flex justify-center bg-gray-50 w-full items-center">
+			<div className="flex justify-center w-full items-center">
 				{actualGroups.length > 1 && (
 					<div className="flex justify-center w-full items-center">
 						{/* Previous Button */}

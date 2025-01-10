@@ -185,6 +185,7 @@ const SelectorMobile = () => {
 		} catch (e) { }
 	};
 
+	
 	// Initial template selection
 	useEffect(() => {
 		if (templates.length > 0 && !currentTemplate) setTemplate(templates[0].id);

@@ -493,6 +493,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                     width: "100%",
                   }}
                 >
+
                   <div >
                     <div
                       style={{

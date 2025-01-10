@@ -524,7 +524,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                               fontWeight: selectedGroupId === group.id ? "600" : "400", // Apply background conditionally
 
                             }}
-                          >
+                          >{index + 1}.
                             <img
                               src={group.imageUrl ?? noImage} // Fallback to noImage if imageUrl is null/undefined
                               alt={group.name || "Group"} // Fallback alt text if name is null/undefined
@@ -533,7 +533,7 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                                 marginBottom: "0px"
                               }} // Adjust marginBottom for spacing
                             />
-                            <div>{index + 1}.{group.name}</div>
+                            <div>{group.name}</div>
                           </div>
                         );
                       })}

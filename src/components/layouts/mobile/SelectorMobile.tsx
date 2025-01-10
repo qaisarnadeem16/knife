@@ -293,7 +293,7 @@ const SelectorMobile = () => {
 		if (!selectedGroupId && actualGroups[0]?.id) {
 			setSelectedGroupId(actualGroups[1].id);
 			if (actualGroups[1]?.attributes?.[0]?.options?.[1]) {
-				handleOptionSelection(actualGroups[0].attributes[0].options[1]);
+				handleOptionSelection(actualGroups[0].attributes[0].options[2]);
 			}
 		}
 
@@ -303,7 +303,21 @@ const SelectorMobile = () => {
 		// }
 	}, [actualGroups, selectedGroupId]);
 
+	useEffect(() => {
 
+		// Handle multiple groups - default to the second group and set an option
+		if (selectedGroupId && (selectedGroupId === actualGroups[4]?.id || selectedGroupId === actualGroups[5]?.id)) {
+
+			if (actualGroups[0]?.attributes?.[0]) {
+				handleOptionSelection(actualGroups[0].attributes[0].options[3]);
+			}
+		} else {
+			if (actualGroups[0]?.attributes?.[0]) {
+				handleOptionSelection(actualGroups[0].attributes[0].options[2]);
+			}
+		}
+
+	}, [selectedGroupId]);
 
 
 	const handleGroupSelection = (groupId: number | null) => {

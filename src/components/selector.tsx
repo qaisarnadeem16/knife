@@ -3,7 +3,7 @@ import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
 import styled, { css } from "styled-components";
 import { ReactComponent as SearchPlusSolid } from "../assets/icons/search-plus-solid.svg";
 import { ReactComponent as SearchMinusSolid } from "../assets/icons/search-minus-solid.svg";
-import { useZakeke } from "zakeke-configurator-react";
+import { Option, useZakeke } from "zakeke-configurator-react";
 import {
   List,
   ListItem,
@@ -216,41 +216,39 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
 
 
 
+  const handleOptionSelection = (option: Option) => {
 
+
+    setCamera(option.attribute.cameraLocationId!);
+    selectOption(option.id);
+
+    try {
+      if ((window as any).algho) (window as any).algho.sendUserStopForm(true);
+    } catch (e) { }
+  };
   // useEffect(() => {
-  //   const initializeCamera = () => {
-  //     if (!groups || groups.length === 0) {
-  //       // console.warn("Groups are empty or undefined.");
-  //       return;
+  //   if (!groups || groups.length === 0) return;
+
+
+  //   // Handle multiple groups - default to the second group and set an option
+  //   // if (groups[0]?.id) {
+  //   //   selectGroup(groups[1].id);
+  //   //   if (groups[0]?.attributes?.[0]?.options?.[1]) {
+  //   //     handleOptionSelection(groups[0].attributes[0].options[1]);
+  //   //   }
+  //   // }
+
+  //   if (groups[4]?.id) {
+  //     selectGroup(groups[1].id);
+  //     if (groups[0]?.attributes?.[0]?.options?.[3]) {
+  //       handleOptionSelection(groups[0].attributes[0].options[3]);
   //     }
+  //   }
 
-  //     const cameraGroup = groups.find((group) => group.name === "Cams");
-  //     if (!cameraGroup || cameraGroup.attributes.length === 0) {
-  //       // console.warn("Camera group or attributes are missing.");
-  //       return;
-  //     }
+  // }, [groups, selectGroup]);
 
-  //     // Define mobile device breakpoint
-  //     // const isMobileDevice = window.innerWidth <= 768;
 
-  //     const options = cameraGroup.attributes[0].options;
-  //     // console.log("Is mobile device:", isMobileDevice);
 
-  //     const defaultCamera = isMobile
-  //       ? options.find((option) => option.name === "Desktop cam") : options.find((option) => option.name === "Mobile cam")
-  //     // console.log("defaultCamera", defaultCamera)
-  //     if (defaultCamera) {
-  //       selectOption(defaultCamera.id);
-  //       selectOptionId(defaultCamera.id);
-  //       selectOptionName(defaultCamera.name);
-  //     } else {
-  //       console.warn("No default camera found for the current device.");
-  //     }
-  //   };
-
-  //   // Call initialization logic
-  //   initializeCamera();
-  // }, [groups]);
 
   // useEffect(() => {
   // 	const textItems = items.filter((item) => item.type === 0) // as TextItem[];
@@ -275,14 +273,14 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedAttribute, attributes]);
 
-  useEffect(() => {
-    if (selectedGroup) {
-      const camera = selectedGroup.cameraLocationId;
-      if (camera) setCamera(camera);
-    }
+  // useEffect(() => {
+  //   if (selectedGroup) {
+  //     const camera = selectedGroup.cameraLocationId;
+  //     if (camera) setCamera(camera);
+  //   }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedGroupId]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selectedGroupId]);
 
   if (isSceneLoading || !groups || groups.length === 0)
     return (
@@ -315,6 +313,9 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
     selectGroup(id);
     selectGroupIdFromTray(id);
   };
+
+
+
 
 
   const toggleTray = () => {
@@ -500,6 +501,8 @@ const Selector: FunctionComponent<TrayPreviewOpenButton3DProps> = ({
                         flexDirection: "row",
                         gap: "20px",
                         justifyContent: "center",
+                        alignItems: "center",
+
                         marginTop: "20px"
 
                       }}

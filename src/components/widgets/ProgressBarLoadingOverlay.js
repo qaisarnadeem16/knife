@@ -15,7 +15,7 @@ const ProgressBarLoadingBackground = styled.div`
   z-index: 12;
 `;
 const ProgressBarLoadingContainer = styled.div`
-  width: 40%;
+  width:  700px;;
   margin: 0 auto;
   /* height: 80vh; */
   padding: 10px;

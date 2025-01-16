@@ -220,9 +220,10 @@ export const ZoomOutIcon = styled(Icon)`
 
 export const AddToCartButton = styled(Button)`
   position: relative;
-  right: 10%;
-  min-width: 280px;
-  background-color: #297ca3;
+  right: 50px;
+  top: 100px;
+  min-width: 180px;
+  background-color: #000;
   font-family: 'Roboto';
   font-size: 18px;
 

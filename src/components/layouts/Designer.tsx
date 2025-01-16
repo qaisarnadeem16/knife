@@ -690,9 +690,9 @@ const Designer: FC<{
   window.addEventListener("error", observerErrorHandler);
 
   // console.log('item', item)
-  console.log('itemsFiltered', itemsFiltered)
-  console.log('items', items)
-  console.log('finalVisibleAreas', finalVisibleAreas)
+  // console.log('itemsFiltered', itemsFiltered)
+  // console.log('items', items)
+  // console.log('finalVisibleAreas', finalVisibleAreas)
   return (
     <>
 

@@ -309,10 +309,10 @@ const Viewer = () => {
 			)}
 			{!isSceneLoading && !isFullscreen && (
 				<>
-					{<div className='md:left-[3rem] left-[1rem] md:top-[.52rem] top-[1rem]' style={{ position: "absolute", fontWeight: "555" }}>
+					{/* {<div className='md:left-[3rem] left-[1rem] md:top-[.52rem] top-[1rem]' style={{ position: "absolute", fontWeight: "555" }}>
 						<div className='md:block hidden'>{product?.name}</div>
 						<div>USD {price}</div>
-					</div>}
+					</div>} */}
 					<ZoomInIcon isMobile={isMobile} key={'zoomin'} hoverable onClick={zoomIn}>
 						<SearchPlusSolid />
 					</ZoomInIcon>

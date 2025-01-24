@@ -373,7 +373,7 @@ const Footer = () => {
 						{!isAddToCartLoading && isOutOfStock && <span>{T._('OUT OF STOCK', 'Composer')}</span>}
 					</AddToCartButton> */}
 					{/* )} */}
-					{/* {isBuyVisibleForQuoteRule && !isViewerMode && ( */}
+					{isBuyVisibleForQuoteRule && !isViewerMode && (
 						<AddToCartButton
 							ref={addToCartButtonRef}
 							// onPointerEnter={() => {
@@ -383,7 +383,7 @@ const Footer = () => {
 							// onPointerLeave={() => {
 							// 	closeOutOfStockTooltip();
 							// }}
-							disabled={ isAddToCartLoading || isOutOfStock}
+							disabled={isAddToCartLoading || isOutOfStock}
 							primary
 							onClick={!isAddToCartLoading ? () => handleAddToCart() : () => null}
 						>
@@ -397,7 +397,7 @@ const Footer = () => {
 							)}
 							{!isAddToCartLoading && isOutOfStock && <span>{T._('OUT OF STOCK', 'Composer')}</span>}
 						</AddToCartButton>
-					{/* )} */}
+					)}
 				</FooterRightElementsContainer>
 			</>
 			{/* )} */}

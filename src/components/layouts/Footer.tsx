@@ -373,7 +373,7 @@ const Footer = () => {
 						{!isAddToCartLoading && isOutOfStock && <span>{T._('OUT OF STOCK', 'Composer')}</span>}
 					</AddToCartButton> */}
 					{/* )} */}
-					{isBuyVisibleForQuoteRule && !isViewerMode && (
+					{/* {isBuyVisibleForQuoteRule && !isViewerMode && ( */}
 						<AddToCartButton
 							ref={addToCartButtonRef}
 							// onPointerEnter={() => {
@@ -397,7 +397,7 @@ const Footer = () => {
 							)}
 							{!isAddToCartLoading && isOutOfStock && <span>{T._('OUT OF STOCK', 'Composer')}</span>}
 						</AddToCartButton>
-					)}
+					{/* )} */}
 				</FooterRightElementsContainer>
 			</>
 			{/* )} */}
